@@ -45,6 +45,12 @@ const router = createRouter({
       component: () => import('../views/ClassManagement.vue'),
       meta: { title: '班级管理' }
     },
+    {
+      path: '/students', // 使用这个路径
+      name: 'StudentManagement',
+      component: () => import('../views/StudentManagement.vue'),
+      meta: { title: '学生管理' }
+    },
     // ... 其他路由
   ]
 })

@@ -89,22 +89,37 @@
         *   [ ] 将页面逻辑抽离到 `class.config.js`。
     *   **备注:** 完成时间: 2025-04-26 (后端), 2025-04-26 (前端)。实现思路: 后端完成 CRUD、分页、导入导出 API。前端完成对应页面，包括搜索、表格、分页、表单弹窗、导入导出。实现了前后端校验、基于日期的自动状态计算和后端定时状态更新。
 
-*   [ ] **7. 模块：学生管理 (Student)**
+*   [x] **7. 模块：学生管理 (Student)**
     *   **后端:**
-        *   [ ] 创建 `Student` 实体类, `StudentQuery`。
-        *   [ ] 创建 `StudentClazzRelation` 关联实体类。
-        *   [ ] 创建 `StudentClazzHistory` 变更记录实体类。
-        *   [ ] 创建 `StudentMapper`, `StudentClazzRelationMapper`, `StudentClazzHistoryMapper` 接口及 XML。
-        *   [ ] 创建 `StudentService` 接口及实现 (CRUD, 导入, 导出, 关联班级, 处理班级变更逻辑)。
-        *   [ ] 创建 `StudentController`。
-        *   [ ] 实现身份证号自动提取出生日期逻辑。
+        *   [x] 创建 `Student` 实体类, `StudentQuery`。
+        *   [x] 创建 `StudentClazzHistory` 变更记录实体类。
+        *   [x] 创建 `StudentMapper`, `StudentClazzHistoryMapper` 接口及 XML。
+        *   [x] 创建 `StudentService` 接口及实现 (CRUD, 导入, 导出, 处理班级变更历史记录逻辑)。
+        *   [x] 创建 `StudentController` (提供 RESTful API, 包括获取历史记录)。
+        *   [x] 实现身份证号自动提取出生日期逻辑 (在 `Student` 实体 `setIdCard` setter 中)。
+        *   [x] 添加后端校验逻辑 (Entity 注解, Controller 参数校验)。
+        *   [x] 添加 Service 层业务校验 (ID card 唯一性, Student Number 唯一性, 班级有效性)。
+        *   [x] 创建 `StudentClazzHistoryDto` 用于包含班级名称。
+        *   [x] 实现 Service 和 Mapper 方法以 JOIN 查询方式获取带班级名称的历史记录。
         *   [ ] 编写测试。
+        *   [TODO] Enhance `listStudents` to return DTO with class name.
+        *   [TODO] Enhance `getStudentInfo` to return DTO with class name.
+        *   [TODO] Enhance `listStudentsForExport` to export class name (using DTO/VO).
+        *   [TODO] Consider implementing automatic student number generation.
     *   **前端:**
-        *   [ ] 创建 `StudentManagement.vue` 页面。
-        *   [ ] 实现学生信息的展示、增删改查、导入导出。
-        *   [ ] 实现学生关联班级、查看/添加变更记录功能。
-        *   [ ] 将页面逻辑抽离到 `student.config.js`。
-    *   **备注:**
+        *   [x] 创建 `StudentManagement.vue` 页面 (包含搜索、按钮、表格)。
+        *   [x] 实现学生信息的展示、增删改查、导入导出 (对接 API)。
+        *   [x] 实现 `StudentFormDialog.vue` 新增/修改弹窗组件。
+        *   [x] 实现 `StudentClassHistoryDialog.vue` 班级历史弹窗组件。
+        *   [x] 实现前端表单校验。
+        *   [x] 实现前端身份证自动填充逻辑。
+        *   [x] 实现查看班级变更历史功能 (按钮、API 调用、弹窗展示，包含班级名称)。
+        *   [ ] 将页面逻辑抽离到 `student.config.js` (按需进行)。
+        *   [TODO] Display class name directly in the main table (requires backend DTO change).
+        *   [TODO] Enhance import feedback (e.g., download error report).
+        *   [IGNORE] Linter warnings for unused icons (`StudentManagement.vue`).
+        *   [IGNORE] Linter warnings for unused props (`StudentClassHistoryDialog.vue`).
+    *   **备注:** 完成时间: 2024-05-07 (主要功能)。实现思路: 后端实现 CRUD、导入导出、校验、班级历史记录。前端实现页面、弹窗、API 对接、前端校验、自动填充、历史记录展示。注意: `StudentClazzRelationMapper` 未实现，因业务规则为学生同时只能属一个班级。
 
 *   [ ] **8. 模块：节课管理 (CourseTime)**
     *   **后端:**
