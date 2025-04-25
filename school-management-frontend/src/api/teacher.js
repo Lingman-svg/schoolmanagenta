@@ -1,3 +1,11 @@
+/*
+ * @Author: LingMeng 2663421939@qq.com
+ * @Date: 2025-04-25 23:17:13
+ * @LastEditors: LingMeng 2663421939@qq.com
+ * @LastEditTime: 2025-04-26 00:56:19
+ * @FilePath: \schoolmanagenta\school-management-frontend\src\api\teacher.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 import request from '@/utils/request'; // 假设 request 实例已封装好
 
 // 获取教师分页列表
@@ -89,4 +97,12 @@ export function importTeacherData(file) {
 //     url: '/subject/all', // 假设有这样一个接口
 //     method: 'get'
 //   });
-// } 
+// }
+
+// 获取所有有效教师列表 (用于下拉)
+export function listValidTeachers() {
+  return request({
+    url: '/teacher/valid', // Assuming a backend endpoint /teacher/valid
+    method: 'get'
+  })
+} 

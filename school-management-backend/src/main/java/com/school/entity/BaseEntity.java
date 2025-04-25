@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode // 如果需要比较对象，建议添加
 public abstract class BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L; // 序列化版本号
-
     /**
      * 创建人ID (假设用户ID是 Long 类型)
      * 自动填充: INSERT

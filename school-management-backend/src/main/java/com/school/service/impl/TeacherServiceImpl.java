@@ -1,3 +1,11 @@
+/*
+ * @Author: LingMeng 2663421939@qq.com
+ * @Date: 2025-04-25 23:09:30
+ * @LastEditors: LingMeng 2663421939@qq.com
+ * @LastEditTime: 2025-04-26 01:06:25
+ * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\service\impl\TeacherServiceImpl.java
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 package com.school.service.impl;
 
 import com.school.entity.Teacher;
@@ -252,5 +260,19 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
         } else {
             return StrUtil.format("成功导入全部 {} 条数据！", successCount);
         }
+    }
+
+    @Override
+    public List<Teacher> listValidTeachersForSelection() {
+        LambdaQueryWrapper<Teacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Teacher::getId, Teacher::getTeacherName) // Only select ID and Name
+               .eq(Teacher::getIsValid, 1) // Assuming 1 means valid
+               .orderByAsc(Teacher::getTeacherName); // Optional: order by name
+        return list(wrapper); // Use IService's list method
+    }
+    
+    @Override
+    public boolean existsById(Long id) {
+        return baseMapper.exists(new LambdaQueryWrapper<Teacher>().eq(Teacher::getId, id));
     }
 }

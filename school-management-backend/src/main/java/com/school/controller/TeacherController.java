@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/teacher")
 @RequiredArgsConstructor
+@Validated
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -94,6 +95,15 @@ public class TeacherController {
         }
         boolean success = teacherService.deleteTeachersByIds(ids);
         return R.result(success);
+    }
+
+    /**
+     * 获取所有有效教师列表 (用于下拉选择)
+     */
+    @GetMapping("/valid")
+    public R<List<Teacher>> listValid() {
+        List<Teacher> list = teacherService.listValidTeachersForSelection();
+        return R.success(list);
     }
 
     /**

@@ -73,4 +73,12 @@ public interface TeacherService extends IService<Teacher> {
      */
     String importTeachers(MultipartFile file) throws IOException;
 
+    /**
+     * 获取所有有效的教师列表 (通常用于下拉选择)
+     * @return 有效教师列表 (可能只需要 ID 和 Name)
+     */
+    List<Teacher> listValidTeachersForSelection();
+
+    boolean existsById(Long id); // Add this if not present
+
 } 

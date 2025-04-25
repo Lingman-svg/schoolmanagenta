@@ -22,7 +22,7 @@
     *   **步骤:**
         *   [x] 使用 `npm create vue@latest` 创建项目骨架 (Vite + Vue 3 + Router + Pinia + ESLint + Prettier)。
         *   [x] 安装所需依赖 (Element Plus, VxeTable, Axios)。
-        *   [ ] 设计基础布局 (左右结构，蓝白主题)。
+        *   [x] 设计基础布局 (左右结构，蓝白主题)。
         *   [ ] 配置路由 (`vue-router`)。
         *   [x] 封装 Axios 请求 (`utils/request.js`)。
     *   **备注:** 完成时间: 2025-04-25。实现思路: 使用 `npm create vue@latest` 交互式创建项目，然后 `cd` 进入目录使用 `npm install` 安装 Element Plus, VxeTable, Axios。在 `main.js` 中引入 Element Plus 和 VxeTable。创建 `utils/request.js` 封装 Axios 实例和拦截器。注意 Node 版本兼容性警告。
