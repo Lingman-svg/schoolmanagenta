@@ -2,7 +2,7 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-25 21:28:40
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-26 21:23:34
+ * @LastEditTime: 2025-04-27 00:24:09
  * @FilePath: \schoolmanagenta\TODO.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -144,10 +144,11 @@
 
 *   [ ] **9. 模块：课程管理 (Course)**
     *   **后端:**
-        *   [ ] 创建 `Course` 实体类, `CourseQuery`。
-        *   [ ] 创建 `CourseMapper` 接口及 XML。
-        *   [ ] 创建 `CourseService` 接口及实现 (CRUD, 导入, 导出, **时间冲突校验逻辑**)。
-        *   [ ] 创建 `CourseController`。
+        *   [x] 创建 `Course` 实体类, `CourseQuery`。
+        *   [x] 创建 `CourseMapper` 接口及 XML。
+        *   [x] 创建 `CourseService` 接口及实现。
+        *   [x] 创建 `CourseController`。
+        *   [ ] 实现时间冲突校验逻辑 (在 Service/Mapper 中)。
         *   [ ] 编写测试。
     *   **前端:**
         *   [x] 创建 `CourseManagement.vue` 页面 (使用 FullCalendar)。
@@ -159,7 +160,7 @@
         *   [ ] 实现导入导出功能。
         *   [ ] 班级、教师、节课使用下拉选择 (已在弹窗内实现)。
         *   [ ] 将页面逻辑抽离到 `course.config.js` (按需进行)。
-    *   **备注:** 完成时间: 2024-05-13 (前端主要功能)。实现思路: 使用 FullCalendar Vue3 组件展示课表，通过 `datesSet` 回调处理日期切换，通过 `eventClick` 处理事件交互，通过 `renderEventContent` 自定义事件显示。修复了数据加载、日期计算和样式显示问题。后端 CRUD 及校验逻辑待完成。
+    *   **备注:** 完成时间: 2024-05-13 (前端主要功能), 2024-05-13 (后端基础结构)。实现思路: 前端使用 FullCalendar。后端基础 CRUD 结构已存在，但缺少具体的业务校验逻辑（如时间冲突）和单元测试。
 
 *   [x] **10. 模块：成绩管理 (Grade/Score)**
     *   **后端:**

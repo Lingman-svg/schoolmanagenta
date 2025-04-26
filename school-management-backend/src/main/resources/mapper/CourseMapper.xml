@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.school.mapper.CourseMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.school.entity.Course">
+        <!-- Course ID first -->
+        <id column="id" property="id" /> 
+        <!-- Course fields -->
+        <result column="class_id" property="classId" />
+        <result column="teacher_id" property="teacherId" />
+        <result column="subject_id" property="subjectId" />
+        <result column="course_time_id" property="courseTimeId" />
+        <result column="day_of_week" property="dayOfWeek" />
+        <result column="introduction" property="introduction" />
+        <result column="location" property="location" />
+        <!-- BaseEntity fields -->
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="is_valid" property="isValid" />
+        <result column="deleted" property="deleted" />
+        <result column="remark" property="remark" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, class_id, teacher_id, subject_id, course_time_id, day_of_week, introduction, location,
+        create_by, create_time, update_by, update_time, is_valid, deleted, remark
+    </sql>
+
+    <!-- 如果有自定义的 SQL 查询，可以在这里添加 -->
+    <!-- 例如，检查时间冲突的查询 -->
+    <!-- <select id="findConflictingCourses" resultType="com.school.entity.Course">
+        SELECT <include refid="Base_Column_List" />
+        FROM sch_course
+        WHERE deleted = 0 AND is_valid = 1
+        AND day_of_week = #{dayOfWeek}
+        AND course_time_id = #{courseTimeId}
+        AND (teacher_id = #{teacherId} OR location = #{location})
+        <if test="id != null">
+            AND id != #{id}
+        </if>
+    </select> -->
+
+</mapper> 
