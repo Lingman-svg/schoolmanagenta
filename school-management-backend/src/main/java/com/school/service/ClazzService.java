@@ -15,6 +15,7 @@ import com.school.entity.query.ClazzQuery;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -88,6 +89,14 @@ public interface ClazzService extends IService<Clazz> {
      * @return 班级列表
      */
     List<Clazz> listClazzesForExport(ClazzQuery query);
+
+    /**
+     * 获取所有有效的班级列表 (通常用于下拉选择)
+     * @return 有效班级列表 (可能只需要 ID 和 Name)
+     */
+    List<Clazz> listValidClasses();
+
+    boolean existsById(Long id);
 
     // TODO: 添加导入、导出相关方法声明
     // void importClazzes(InputStream inputStream);

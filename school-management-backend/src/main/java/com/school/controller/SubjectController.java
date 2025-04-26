@@ -11,6 +11,9 @@ import jakarta.validation.Valid; // 用于 @Valid 注解
 import org.springframework.validation.annotation.Validated; // 用于 @Validated 注解
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.Operation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,6 +25,8 @@ import java.util.List;
 @RequestMapping("/api/subjects") // 定义基础路由
 @Validated // 开启方法级别的参数校验
 public class SubjectController {
+
+    private static final Logger log = LoggerFactory.getLogger(SubjectController.class);
 
     @Resource
     private SubjectService subjectService;
@@ -39,8 +44,10 @@ public class SubjectController {
     /**
      * 获取所有有效科目列表 (用于下拉)
      */
+    @Operation(summary = "获取所有有效科目列表 (用于下拉)")
     @GetMapping("/valid")
     public R<List<Subject>> listValid() {
+        log.info("获取所有有效科目列表");
         List<Subject> list = subjectService.findAllValidSubjects();
         return R.success(list);
     }

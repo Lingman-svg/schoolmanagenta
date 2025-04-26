@@ -2,7 +2,7 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-26 00:28:40
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-26 00:31:32
+ * @LastEditTime: 2025-04-26 21:54:48
  * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\controller\ClazzController.java
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -14,8 +14,10 @@ import com.school.entity.query.ClazzQuery;
 import com.school.service.ClazzService;
 import com.school.utils.ExcelUtil;
 import com.school.utils.R;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clazz")
 @RequiredArgsConstructor
+@Slf4j
 public class ClazzController {
 
     private final ClazzService clazzService;
@@ -126,6 +129,14 @@ public class ClazzController {
             e.printStackTrace();
             return R.fail("导入失败: " + e.getMessage());
         }
+    }
+
+    @Operation(summary = "获取所有有效班级列表 (用于下拉)")
+    @GetMapping("/valid")
+    public R<List<Clazz>> listValid() {
+        log.info("获取所有有效班级列表");
+        List<Clazz> list = clazzService.listValidClasses();
+        return R.success(list);
     }
 
 } 

@@ -1,16 +1,20 @@
 package com.school.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.school.entity.Clazz;
+import com.school.entity.Course;
 import com.school.entity.query.ClazzQuery;
 import com.school.entity.Teacher;
 import com.school.mapper.ClazzMapper;
+import com.school.mapper.CourseMapper;
 import com.school.service.ClazzService;
 import com.school.service.TeacherService;
 import com.school.utils.ExcelUtil;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -38,6 +42,9 @@ import java.time.LocalDate;
 public class ClazzServiceImpl extends ServiceImpl<ClazzMapper, Clazz> implements ClazzService {
 
     private final TeacherService teacherService;
+
+    @Resource
+    private CourseMapper courseMapper;
 
     @Override
     public Page<Clazz> listClazzes(ClazzQuery query) {
@@ -284,6 +291,17 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzMapper, Clazz> implements
         if (!toUpdate.isEmpty()) {
             log.info("Updating status for {} classes.", updatedCount);
             updateBatchById(toUpdate); // Efficient batch update
+
+            //如果 状态是已结业（2） 需要更新该班级的课程状态为未有效
+            toUpdate
+                    .stream()
+                    .filter(e->e.getStatus() == 2)
+                    .toList()
+                    .forEach(e-> 
+                            courseMapper.update(new LambdaUpdateWrapper<Course>()
+                                    .eq(Course::getClassId, e.getId())
+                                    .set(Course::getIsValid, 0)
+                    ));
         } else {
             log.info("No class statuses needed updating.");
         }
@@ -304,5 +322,22 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzMapper, Clazz> implements
         } else {
             return 1; // 进行中
         }
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return this.getById(id) != null;
+    }
+
+    @Override
+    public List<Clazz> listValidClasses() {
+        log.info("获取所有有效班级列表");
+        LambdaQueryWrapper<Clazz> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Clazz::getIsValid, 1); // 假设 1 代表有效
+        // 通常下拉列表按名称排序
+        wrapper.orderByAsc(Clazz::getClassName);
+        // Select only necessary fields if needed for performance
+        // wrapper.select(Clazz::getId, Clazz::getClassName);
+        return this.list(wrapper);
     }
 } 

@@ -57,6 +57,20 @@ const router = createRouter({
       component: () => import('../views/GradeManagement.vue'),
       meta: { title: '成绩管理' }
     },
+    // --- 添加节课时间管理路由 ---
+    {
+      path: '/course-times', // 更新路径，与其他模块一致
+      name: 'CourseTimeManagement', // 路由名称
+      component: () => import('../views/CourseTimeManagement.vue'), // 更新组件导入路径
+      meta: { title: '节课时间管理' } // 页面标题
+    },
+    // --- 添加课程表管理路由 ---
+    {
+      path: '/courses', // 定义访问路径
+      name: 'CourseManagement', // 路由名称
+      component: () => import('../views/CourseManagement.vue'), // 指向新创建的组件
+      meta: { title: '课程表管理' } // 页面标题
+    },
     // ... 其他路由
   ]
 })

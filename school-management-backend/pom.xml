@@ -86,6 +86,13 @@
       <version>${easyexcel.version}</version>
     </dependency>
 
+    <!-- SpringDoc OpenAPI (Swagger 3) -->
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.5.0</version> <!-- 使用与 Spring Boot 3.2.x 兼容的版本 -->
+    </dependency>
+
     <!-- 移除旧的 JUnit 4 依赖 -->
     <!--
     <dependency>
@@ -112,7 +119,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -135,10 +142,10 @@
           <artifactId>maven-site-plugin</artifactId>
           <version>3.7.1</version>
         </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
+<!--        <plugin>-->
+<!--          <artifactId>maven-project-info-reports-plugin</artifactId>-->
+<!--          <version>3.0.0</version>-->
+<!--        </plugin>-->
       </plugins>
     </pluginManagement>
     <plugins>

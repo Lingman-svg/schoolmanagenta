@@ -1,3 +1,11 @@
+<!--
+ * @Author: LingMeng 2663421939@qq.com
+ * @Date: 2025-04-25 21:28:40
+ * @LastEditors: LingMeng 2663421939@qq.com
+ * @LastEditTime: 2025-04-26 21:23:34
+ * @FilePath: \schoolmanagenta\TODO.md
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 # 小学学生管理系统开发计划 (TODO)
 
 **重要提示:**
@@ -33,7 +41,7 @@
         *   [x] 定义统一响应结果类 (`R.java` 或类似)。
         *   [x] 配置全局异常处理 (`GlobalExceptionHandler.java`)。
     *   **前端:**
-        *   [ ] 封装通用组件 (例如：分页组件, 导入按钮, 导出按钮)。
+        *   [ ] 封装通用组件 (例如：表格和分页组件, 导入按钮, 导出按钮)。
         *   [x] 建立 API 统一管理模块 (`utils/request.js` 基础封装)。
     *   **备注:** 完成时间: 2025-04-25。实现思路: 后端创建 `R.java` 定义统一响应结构，`GlobalExceptionHandler` 使用 `@RestControllerAdvice` 捕获异常并返回 R 对象，`ExcelUtil` 使用 EasyExcel API 封装导入导出方法。前端创建 `utils/request.js` 配置 Axios 实例、拦截器和基础 URL。
 
@@ -121,19 +129,18 @@
         *   [IGNORE] Linter warnings for unused props (`StudentClassHistoryDialog.vue`).
     *   **备注:** 完成时间: 2024-05-07 (主要功能)。实现思路: 后端实现 CRUD、导入导出、校验、班级历史记录。前端实现页面、弹窗、API 对接、前端校验、自动填充、历史记录展示。注意: `StudentClazzRelationMapper` 未实现，因业务规则为学生同时只能属一个班级。
 
-*   [ ] **8. 模块：节课管理 (CourseTime)**
+*   [x] **8. 模块：节课管理 (CourseTime)**
     *   **后端:**
-        *   [ ] 创建 `CourseTime` 实体类, `CourseTimeQuery`。
-        *   [ ] 创建 `CourseTimeMapper` 接口及 XML。
-        *   [ ] 创建 `CourseTimeService` 接口及实现。
-        *   [ ] 创建 `CourseTimeController`。
+        *   [x] 创建 `CourseTime` 实体类, `CourseTimeQuery`。
+        *   [x] 创建 `CourseTimeMapper` 接口及 XML。
+        *   [x] 创建 `CourseTimeService` 接口及实现 (包含 CRUD, 分页查询, 基础校验, **时间段重叠校验**)。
+        *   [x] 创建 `CourseTimeController`。
         *   [ ] 编写测试。
     *   **前端:**
-        *   [ ] 创建 `CourseTimeManagement.vue` 页面。
-        *   [ ] 实现节课信息的展示、增删改查。
+        *   [x] 创建 `CourseTimeManagement.vue` 页面。
+        *   [x] 实现节课信息的展示、增删改查 (包含分页、搜索、弹窗表单、前后端校验反馈)。
         *   [ ] 将页面逻辑抽离到 `courseTime.config.js`。
-    *   **备注:**
-
+    *   **备注:** 完成时间: 2024-05-12 (前后端)。实现思路: 后端完成 CRUD、分页查询及校验逻辑 (包括时间段重叠)。前端完成对应页面，使用 VxeTable 和 Element Plus，实现数据展示和交互，并能正确处理后端的校验错误信息。
 
 *   [ ] **9. 模块：课程管理 (Course)**
     *   **后端:**
@@ -143,12 +150,16 @@
         *   [ ] 创建 `CourseController`。
         *   [ ] 编写测试。
     *   **前端:**
-        *   [ ] 创建 `CourseManagement.vue` 或 `CourseSchedule.vue` 页面。
-        *   [ ] 以课表形式或列表形式展示、编排课程。
-        *   [ ] 实现增删改查、导入导出。
-        *   [ ] 班级、教师、节课使用下拉选择。
-        *   [ ] 将页面逻辑抽离到 `course.config.js`。
-    *   **备注:**
+        *   [x] 创建 `CourseManagement.vue` 页面 (使用 FullCalendar)。
+        *   [x] 以课表形式 (周/日视图) 展示课程，支持切换视图。
+        *   [x] 实现课程的增、删、改（通过点击事件和弹窗）。
+        *   [x] 实现通过下拉列表筛选班级、教师。
+        *   [x] 实现切换周/日时自动重新加载数据。
+        *   [x] 动态调整事件显示内容以适应不同视图。
+        *   [ ] 实现导入导出功能。
+        *   [ ] 班级、教师、节课使用下拉选择 (已在弹窗内实现)。
+        *   [ ] 将页面逻辑抽离到 `course.config.js` (按需进行)。
+    *   **备注:** 完成时间: 2024-05-13 (前端主要功能)。实现思路: 使用 FullCalendar Vue3 组件展示课表，通过 `datesSet` 回调处理日期切换，通过 `eventClick` 处理事件交互，通过 `renderEventContent` 自定义事件显示。修复了数据加载、日期计算和样式显示问题。后端 CRUD 及校验逻辑待完成。
 
 *   [x] **10. 模块：成绩管理 (Grade/Score)**
     *   **后端:**

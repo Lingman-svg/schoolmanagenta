@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.Operation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,6 +27,7 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService teacherService;
+    private static final Logger log = LoggerFactory.getLogger(TeacherController.class);
 
     /**
      * 获取教师分页列表
@@ -100,8 +104,10 @@ public class TeacherController {
     /**
      * 获取所有有效教师列表 (用于下拉选择)
      */
+    @Operation(summary = "获取所有有效教师列表 (用于下拉)")
     @GetMapping("/valid")
     public R<List<Teacher>> listValid() {
+        log.info("获取所有有效教师列表");
         List<Teacher> list = teacherService.listValidTeachersForSelection();
         return R.success(list);
     }
