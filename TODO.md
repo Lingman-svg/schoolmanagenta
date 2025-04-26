@@ -150,21 +150,25 @@
         *   [ ] 将页面逻辑抽离到 `course.config.js`。
     *   **备注:**
 
-*   [ ] **10. 模块：成绩管理 (Grade/Score)**
+*   [x] **10. 模块：成绩管理 (Grade/Score)**
     *   **后端:**
-        *   [ ] 创建 `Grade` 实体类, `GradeQuery`。
-        *   [ ] 创建 `GradeMapper` 接口及 XML。
-        *   [ ] 创建 `GradeService` 接口及实现 (CRUD, 导入, 导出)。
-        *   [ ] 考虑成绩分析接口 (可能需要行转列)。
-        *   [ ] 创建 `GradeController`。
-        *   [ ] 编写测试。
+        *   [x] 创建 `Grade` 实体类, `GradeQuery`, `GradeDto`, `GradeExcelVo`。
+        *   [x] 创建 `GradeMapper` 接口及 XML。
+        *   [x] 创建 `GradeService` 接口及实现 (CRUD, 批量删除, 导入, 导出, 列表 DTO 转换)。
+        *   [ ] 考虑成绩分析接口 (可能需要行转列)。 (未完成)
+        *   [x] 创建 `GradeController`。
+        *   [ ] 编写测试。(未完成)
     *   **前端:**
-        *   [ ] 创建 `GradeManagement.vue` 页面。
-        *   [ ] 实现成绩录入、查询、修改、删除、导入导出。
-        *   [ ] 考虑使用 VxeTable 或类似组件实现行转列展示。
-        *   [ ] 学生、科目、班级、教师使用下拉选择。
-        *   [ ] 将页面逻辑抽离到 `grade.config.js`。
-    *   **备注:**
+        *   [x] 创建 `GradeManagement.vue` 页面。
+        *   [x] 实现成绩录入、查询、修改、删除、导入导出。
+        *   [ ] 考虑使用 VxeTable 或类似组件实现行转列展示。(未完成)
+        *   [x] 学生、科目、班级、教师使用下拉选择。
+        *   [x] 实现 `GradeFormDialog.vue` 新增/修改弹窗组件。
+        *   [x] 集成 `ImportDialog.vue` 用于导入。
+        *   [x] 实现新增时根据学生自动填充班级。
+        *   [x] 添加路由和菜单。
+        *   [ ] 将页面逻辑抽离到 `grade.config.js`。(未完成)
+    *   **备注:** 完成时间: 2024-05-10 (主要功能)。实现思路: 后端完成 CRUD、批量删除、导入导出、DTO 转换和日期格式处理。前端完成页面、弹窗、API 对接、导入导出逻辑、下拉选项加载、自动填充班级。解决了日期格式、导出文件类型、导出字段和 JS 导入错误等问题。
 
 ## 第三阶段：系统管理功能
 
