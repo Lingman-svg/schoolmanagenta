@@ -103,6 +103,7 @@
                v-model="localFormData.examTime"
                type="datetime"
                placeholder="选择考试时间"
+               <!-- value-format="YYYY-MM-DDTHH:mm:ss"   -->
                style="width: 100%;"
              />
            </el-form-item>
@@ -134,6 +135,7 @@
                v-model="localFormData.recordTime"
                type="datetime"
                placeholder="选择录入时间 (默认当前)"
+               value-format="YYYY-MM-DDTHH:mm:ss" 
                style="width: 100%;"
              />
            </el-form-item>
