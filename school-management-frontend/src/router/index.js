@@ -51,6 +51,12 @@ const router = createRouter({
       component: () => import('../views/StudentManagement.vue'),
       meta: { title: '学生管理' }
     },
+    {
+      path: '/grades',
+      name: 'GradeManagement',
+      component: () => import('../views/GradeManagement.vue'),
+      meta: { title: '成绩管理' }
+    },
     // ... 其他路由
   ]
 })

@@ -52,4 +52,15 @@ mybatis-plus:
       # # 主键生成策略 (如果需要非自增主键)
       # id-type: ASSIGN_ID # 使用雪花算法生成ID (需要相应配置)
     # # 元数据处理，用于自动填充创建/修改时间等 (需要实现 MetaObjectHandler)
-    # meta-object-handler: com.school.config.MyMetaObjectHandler 
+    # meta-object-handler: com.school.config.MyMetaObjectHandler
+
+  jackson:
+    # --- Jackson Configuration ---
+    date-format: yyyy-MM-dd HH:mm:ss # Default format for serialization (sending to frontend)
+    time-zone: GMT+8       # Or your preferred time zone
+    deserialization:
+      # This property allows Jackson to try multiple formats if the main one fails.
+      # However, it's generally better to configure custom deserializers or use @JsonFormat for specific needs.
+      # A simpler approach for LocalDateTime might be to just rely on its default parsing which handles ISO.
+      # Let's remove @JsonFormat from the entity instead and rely on default ISO handling for now.
+      # accept-multiple-date-formats: true # Might not work directly for LocalDateTime, requires more setup 
