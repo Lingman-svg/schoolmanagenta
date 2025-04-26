@@ -17,7 +17,7 @@
               placeholder="请选择学生"
               filterable
               clearable
-              :disabled="isEditMode" 
+              :disabled="isEditMode"
               style="width: 100%;"
             >
               <el-option
@@ -87,10 +87,10 @@
            <el-form-item label="分数" prop="score">
              <el-input-number
                v-model="localFormData.score"
-               :precision="2" 
+               :precision="2"
                :step="0.1"
                :min="0"
-               :max="100" 
+               :max="100"
                placeholder="请输入分数"
                controls-position="right"
                style="width: 100%;"
@@ -103,7 +103,6 @@
                v-model="localFormData.examTime"
                type="datetime"
                placeholder="选择考试时间"
-               <!-- value-format="YYYY-MM-DDTHH:mm:ss"   -->
                style="width: 100%;"
              />
            </el-form-item>
@@ -135,7 +134,6 @@
                v-model="localFormData.recordTime"
                type="datetime"
                placeholder="选择录入时间 (默认当前)"
-               value-format="YYYY-MM-DDTHH:mm:ss" 
                style="width: 100%;"
              />
            </el-form-item>
@@ -290,4 +288,4 @@ defineExpose({
 
 <style scoped>
 /* Add any specific styles for the dialog here */
-</style> 
+</style>
