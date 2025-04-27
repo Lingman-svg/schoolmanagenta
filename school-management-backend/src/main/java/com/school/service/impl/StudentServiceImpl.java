@@ -330,4 +330,43 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         
         return historyDtoList == null ? new ArrayList<>() : historyDtoList;
     }
+
+    @Override
+    public Object getStudentInfo(Map<String, Object> params) {
+        // 支持 studentName/studentNumber
+        String studentName = (String) params.get("studentName");
+        String studentNumber = (String) params.get("studentNumber");
+        Student student = null;
+        if (studentNumber != null) {
+            student = this.lambdaQuery().eq(Student::getStudentNumber, studentNumber).one();
+        }
+        if (student == null && studentName != null) {
+            student = this.lambdaQuery().eq(Student::getStudentName, studentName).one();
+        }
+        if (student == null) {
+            return "未找到该学生";
+        }
+        return student;
+    }
+
+    @Override
+    public Object getStudentCount(Map<String, Object> params) {
+        // 支持按入学年份、班级等统计
+        Integer year = params.get("year") instanceof Integer ? (Integer) params.get("year") : null;
+        String clazzName = (String) params.get("clazzName");
+        LambdaQueryWrapper<Student> wrapper = new LambdaQueryWrapper<>();
+//        if (year != null) {
+//            // 假设有入学年份字段，实际字段名请替换
+//            wrapper.eq(Student::getEnrollYear, year);
+//        }
+        if (clazzName != null) {
+            // 先查班级ID
+            Clazz clazz = clazzService.lambdaQuery().eq(Clazz::getClassName, clazzName).one();
+            if (clazz != null) {
+                wrapper.eq(Student::getCurrentClazzId, clazz.getId());
+            }
+        }
+        long count = this.count(wrapper);
+        return count;
+    }
 } 

@@ -368,4 +368,46 @@ public class GradeServiceImpl extends ServiceImpl<GradeMapper, Grade> implements
         log.info("导出成绩数据完成.");
     }
 
+    @Override
+    public Object getStudentGrade(Map<String, Object> params) {
+        // 支持 studentName/studentNumber, subjectName
+        String studentName = (String) params.get("studentName");
+        String studentNumber = (String) params.get("studentNumber");
+        String subjectName = (String) params.get("subjectName");
+        // 1. 查找学生
+        Student student = null;
+        if (studentNumber != null) {
+            student = studentService.lambdaQuery().eq(Student::getStudentNumber, studentNumber).one();
+        }
+        if (student == null && studentName != null) {
+            student = studentService.lambdaQuery().eq(Student::getStudentName, studentName).one();
+        }
+        if (student == null) {
+            return new com.school.entity.ai.StudentGradeInfo(studentName, studentNumber, subjectName, null, "未找到该学生");
+        }
+        // 2. 查找科目
+        Subject subject = null;
+        if (subjectName != null) {
+            subject = subjectService.lambdaQuery().eq(Subject::getSubjectName, subjectName).one();
+        }
+        if (subject == null) {
+            return new com.school.entity.ai.StudentGradeInfo(student.getStudentName(), student.getStudentNumber(), subjectName, null, "未找到该科目");
+        }
+        // 3. 查找成绩
+        Grade grade = this.lambdaQuery()
+                .eq(Grade::getStudentId, student.getId())
+                .eq(Grade::getSubjectId, subject.getId())
+                .one();
+        if (grade == null || grade.getScore() == null) {
+            return new com.school.entity.ai.StudentGradeInfo(student.getStudentName(), student.getStudentNumber(), subjectName, null, "未找到该学生该科目的成绩");
+        }
+        return new com.school.entity.ai.StudentGradeInfo(
+                student.getStudentName(),
+                student.getStudentNumber(),
+                subjectName,
+                grade.getScore(),
+                "查询成功"
+        );
+    }
+
 } 

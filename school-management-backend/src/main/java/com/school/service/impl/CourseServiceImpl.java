@@ -172,6 +172,38 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         }
     }
 
+    @Override
+    public Object getCourseInfo(java.util.Map<String, Object> params) {
+        // 支持 classId/teacherId/subjectId/dayOfWeek 查询
+        Long classId = params.get("classId") instanceof Long ? (Long) params.get("classId") : null;
+        Long teacherId = params.get("teacherId") instanceof Long ? (Long) params.get("teacherId") : null;
+        Long subjectId = params.get("subjectId") instanceof Long ? (Long) params.get("subjectId") : null;
+        Integer dayOfWeek = params.get("dayOfWeek") instanceof Integer ? (Integer) params.get("dayOfWeek") : null;
+        LambdaQueryWrapper<Course> wrapper = new LambdaQueryWrapper<>();
+        if (classId != null) wrapper.eq(Course::getClassId, classId);
+        if (teacherId != null) wrapper.eq(Course::getTeacherId, teacherId);
+        if (subjectId != null) wrapper.eq(Course::getSubjectId, subjectId);
+        if (dayOfWeek != null) wrapper.eq(Course::getDayOfWeek, dayOfWeek);
+        List<Course> list = this.list(wrapper);
+        if (list == null || list.isEmpty()) return "未找到相关课程";
+        return list.size() == 1 ? list.get(0) : list;
+    }
+
+    @Override
+    public Object getCourseCount(java.util.Map<String, Object> params) {
+        // 支持按班级、教师、科目、星期统计
+        Long classId = params.get("classId") instanceof Long ? (Long) params.get("classId") : null;
+        Long teacherId = params.get("teacherId") instanceof Long ? (Long) params.get("teacherId") : null;
+        Long subjectId = params.get("subjectId") instanceof Long ? (Long) params.get("subjectId") : null;
+        Integer dayOfWeek = params.get("dayOfWeek") instanceof Integer ? (Integer) params.get("dayOfWeek") : null;
+        LambdaQueryWrapper<Course> wrapper = new LambdaQueryWrapper<>();
+        if (classId != null) wrapper.eq(Course::getClassId, classId);
+        if (teacherId != null) wrapper.eq(Course::getTeacherId, teacherId);
+        if (subjectId != null) wrapper.eq(Course::getSubjectId, subjectId);
+        if (dayOfWeek != null) wrapper.eq(Course::getDayOfWeek, dayOfWeek);
+        return this.count(wrapper);
+    }
+
     // IService 提供的 save, updateById, removeById, removeByIds 会被调用
     // 如果需要对删除操作也添加校验（例如检查是否有关联成绩），可以覆盖 remove 方法
 } 

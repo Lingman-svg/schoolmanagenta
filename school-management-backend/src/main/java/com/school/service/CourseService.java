@@ -43,4 +43,14 @@ public interface CourseService extends IService<Course> {
     // 可以根据需要添加其他业务方法
     // 例如：根据班级和星期获取课程列表
     // List<Course> findCoursesByClassAndDay(Long classId, Integer dayOfWeek);
+
+    /**
+     * AI路由专用：根据参数Map查询课程信息
+     */
+    Object getCourseInfo(java.util.Map<String, Object> params);
+
+    /**
+     * AI路由专用：根据参数Map统计课程数量
+     */
+    Object getCourseCount(java.util.Map<String, Object> params);
 } 

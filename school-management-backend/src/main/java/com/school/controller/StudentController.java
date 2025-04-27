@@ -1,6 +1,8 @@
 package com.school.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.school.annotation.Log;
+import com.school.constant.BusinessType;
 import com.school.entity.Student;
 import com.school.entity.StudentClazzHistory;
 import com.school.entity.dto.StudentClazzHistoryDto;
@@ -27,7 +29,7 @@ import java.util.List;
  * @since 2025-04-26
  */
 @RestController
-@RequestMapping("/student")
+@RequestMapping("/resource/students")
 @RequiredArgsConstructor
 @Validated // Enable validation for path variables, request params etc. if needed
 public class StudentController {
@@ -38,7 +40,7 @@ public class StudentController {
      * 分页查询学生列表
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('base:student:list') or hasAuthority('base:student:view')")
+    @PreAuthorize("hasAuthority('resource:student:list')")
     public R<Page<Student>> list(StudentQuery query) {
         // TODO: Consider returning a DTO with class name instead of just Student entity
         Page<Student> page = studentService.listStudents(query);
@@ -49,7 +51,7 @@ public class StudentController {
      * 根据ID获取学生详情
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:student:view')")
+    @PreAuthorize("hasAuthority('resource:student:view')")
     public R<Student> getInfo(@NotNull @Min(value = 1, message = "ID必须为正整数") @PathVariable Long id) {
         // TODO: Consider returning a DTO with class name
         Student student = studentService.getStudentInfo(id);
@@ -65,7 +67,8 @@ public class StudentController {
      * 新增学生
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('base:student:add')")
+    @PreAuthorize("hasAuthority('resource:student:add')")
+    @Log(title = "学生管理", businessType = BusinessType.INSERT)
     public R<Void> add(@Valid @RequestBody Student student) {
         // @Valid triggers validation based on annotations in Student entity (if any)
         boolean success = studentService.addStudent(student);
@@ -76,7 +79,8 @@ public class StudentController {
      * 修改学生
      */
     @PutMapping
-    @PreAuthorize("hasAuthority('base:student:edit')")
+    @PreAuthorize("hasAuthority('resource:student:edit')")
+    @Log(title = "学生管理", businessType = BusinessType.UPDATE)
     public R<Void> edit(@Valid @RequestBody Student student) {
         // @Valid triggers validation
         if (student.getId() == null || student.getId() <= 0) {
@@ -90,7 +94,8 @@ public class StudentController {
      * 删除学生
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:student:delete')")
+    @PreAuthorize("hasAuthority('resource:student:delete')")
+    @Log(title = "学生管理", businessType = BusinessType.DELETE)
     public R<Void> remove(@NotNull @Min(value = 1, message = "ID必须为正整数") @PathVariable Long id) {
         boolean success = studentService.deleteStudentLogically(id);
         return R.result(success);
@@ -100,7 +105,8 @@ public class StudentController {
      * 批量删除学生
      */
     @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('base:student:delete')")
+    @PreAuthorize("hasAuthority('resource:student:delete')")
+    @Log(title = "学生管理", businessType = BusinessType.DELETE)
     public R<Void> removeBatch(@NotEmpty(message = "删除ID列表不能为空") @RequestBody List<@NotNull @Min(value = 1, message = "ID必须为正整数") Long> ids) {
         boolean success = studentService.deleteStudentsLogicallyBatch(ids);
         return R.result(success);
@@ -110,7 +116,8 @@ public class StudentController {
      * 导出学生数据
      */
     @PostMapping("/export")
-    @PreAuthorize("hasAuthority('base:student:export') or hasAuthority('base:student:list')")
+    @PreAuthorize("hasAuthority('resource:student:export')")
+    @Log(title = "学生管理", businessType = BusinessType.EXPORT)
     public void export(@RequestBody(required = false) StudentQuery query, HttpServletResponse response) {
         // Allow query to be optional or empty for exporting all
         if (query == null) {
@@ -130,7 +137,8 @@ public class StudentController {
      * 导入学生数据
      */
     @PostMapping("/import")
-    @PreAuthorize("hasAuthority('base:student:import') or hasAuthority('base:student:add') or hasAuthority('base:student:edit')")
+    @PreAuthorize("hasAuthority('resource:student:import')")
+    @Log(title = "学生管理", businessType = BusinessType.IMPORT)
     public R<String> importData(@NotNull(message = "上传文件不能为空") @RequestPart("file") MultipartFile file) {
         try {
             String resultMsg = studentService.importStudents(file);
@@ -154,7 +162,7 @@ public class StudentController {
      * 获取学生班级变更历史
      */
     @GetMapping("/{id}/history")
-    @PreAuthorize("hasAuthority('base:student:view')")
+    @PreAuthorize("hasAuthority('resource:student:view')")
     public R<List<StudentClazzHistoryDto>> getHistory(@NotNull @Min(value = 1, message = "学生ID必须为正整数") @PathVariable Long id) {
         List<StudentClazzHistoryDto> historyList = studentService.getClassChangeHistory(id);
         return R.success(historyList);

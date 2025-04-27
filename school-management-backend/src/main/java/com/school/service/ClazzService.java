@@ -102,4 +102,14 @@ public interface ClazzService extends IService<Clazz> {
     // void importClazzes(InputStream inputStream);
     // byte[] exportClazzes(ClazzQuery query);
 
+    /**
+     * AI路由专用：根据参数Map查询班级信息
+     */
+    Object getClazzInfo(java.util.Map<String, Object> params);
+
+    /**
+     * AI路由专用：根据参数Map统计班级数量
+     */
+    Object getClazzCount(java.util.Map<String, Object> params);
+
 } 

@@ -2,7 +2,7 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-27 21:38:17
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-27 21:39:07
+ * @LastEditTime: 2025-04-27 22:05:33
  * @FilePath: \schoolmanagenta\school-management-frontend\src\views\AiChat.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->

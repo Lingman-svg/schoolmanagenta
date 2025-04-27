@@ -83,30 +83,33 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         } else {
             // 2. 查询用户角色 ID 列表
             List<UserRole> userRoles = userRoleMapper.selectList(
-                new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, user.getId())
+                    new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, user.getId())
             );
             if (!CollectionUtils.isEmpty(userRoles)) {
                 List<Long> roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
-                
+
                 // 3. 查询角色信息 (获取角色标识 roleKey)
                 List<Role> roles = roleMapper.selectBatchIds(roleIds);
                 if (!CollectionUtils.isEmpty(roles)) {
                     roles.stream()
-                        .map(Role::getRoleKey) // 获取角色标识符，例如 "admin", "teacher"
-                        .filter(StringUtils::hasText) // 过滤空的角色标识
-                        .forEach(roleKey -> permsSet.add("ROLE_" + roleKey)); // 添加 "ROLE_" 前缀
+                            .map(Role::getRoleKey) // 获取角色标识符，例如 "admin", "teacher"
+                            .filter(StringUtils::hasText) // 过滤空的角色标识
+                            .forEach(roleKey -> permsSet.add("ROLE_" + roleKey)); // 添加 "ROLE_" 前缀
                 }
 
                 // 4. 根据角色 ID 查询菜单权限标识 (perms)
                 List<Menu> menus = menuMapper.selectMenusByRoleIds(roleIds); // 需要在 MenuMapper 中实现此方法
-                 if (!CollectionUtils.isEmpty(menus)) {
-                     menus.stream()
-                         .map(Menu::getPerms) // 获取权限标识符，例如 "system:user:list"
-                         .filter(StringUtils::hasText) // 过滤空的权限标识
-                         .forEach(permsSet::add);
-                 }
+                if (!CollectionUtils.isEmpty(menus)) {
+                    menus.stream()
+                            .map(Menu::getPerms) // 获取权限标识符，例如 "system:user:list"
+                            .filter(StringUtils::hasText) // 过滤空的权限标识
+                            .forEach(permsSet::add);
+                }
             }
         }
+        return permsSet;
+    }
+        /*
      * 根据用户ID查询角色名称列表
      * @param userId 用户ID
      * @return 角色名称列表

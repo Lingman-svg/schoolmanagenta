@@ -1,5 +1,7 @@
 package com.school.controller;
 
+import com.school.annotation.Log;
+import com.school.constant.BusinessType;
 import com.school.entity.SystemConfig;
 import com.school.service.SystemConfigService;
 import com.school.utils.R; // 假设 R 是统一响应类
@@ -27,7 +29,7 @@ public class SystemConfigController {
      * 获取所有系统配置列表
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('base:config:list') or hasAuthority('base:config:view')")
+    @PreAuthorize("hasAuthority('system:config:list')")
     public R<List<SystemConfig>> list() {
         return R.success(systemConfigService.list());
     }
@@ -37,7 +39,7 @@ public class SystemConfigController {
      * @param configKey 参数键名
      */
     @GetMapping("/key/{configKey}")
-    @PreAuthorize("hasAuthority('base:config:view')")
+    @PreAuthorize("hasAuthority('system:config:view')")
     public R<SystemConfig> getConfigByKey(@PathVariable String configKey) {
         SystemConfig config = systemConfigService.lambdaQuery()
                 .eq(SystemConfig::getConfigKey, configKey)
@@ -53,7 +55,7 @@ public class SystemConfigController {
      * @param id 配置ID
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:config:view')")
+    @PreAuthorize("hasAuthority('system:config:view')")
     public R<SystemConfig> getConfigById(@PathVariable Long id) {
         SystemConfig config = systemConfigService.getById(id);
          if (config == null) {
@@ -68,7 +70,8 @@ public class SystemConfigController {
      * @param systemConfig 系统配置实体
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('base:config:add')")
+    @PreAuthorize("hasAuthority('system:config:add')")
+    @Log(title = "系统配置", businessType = BusinessType.INSERT)
     public R<Void> add(@Valid @RequestBody SystemConfig systemConfig) {
          // 校验 Key 是否已存在
         long count = systemConfigService.lambdaQuery()
@@ -86,7 +89,8 @@ public class SystemConfigController {
      * @param systemConfig 系统配置实体
      */
     @PutMapping
-    @PreAuthorize("hasAuthority('base:config:edit')")
+    @PreAuthorize("hasAuthority('system:config:edit')")
+    @Log(title = "系统配置", businessType = BusinessType.UPDATE)
     public R<Void> update(@Valid @RequestBody SystemConfig systemConfig) {
         if (systemConfig.getId() == null) {
             return R.fail("更新配置失败：ID 不能为空");
@@ -119,7 +123,8 @@ public class SystemConfigController {
      * @param id 配置ID
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:config:delete')")
+    @PreAuthorize("hasAuthority('system:config:delete')")
+    @Log(title = "系统配置", businessType = BusinessType.DELETE)
     public R<Void> delete(@PathVariable Long id) {
         SystemConfig config = systemConfigService.getById(id);
          if (config == null) {

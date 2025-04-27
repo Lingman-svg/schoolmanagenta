@@ -192,4 +192,28 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectMapper, Subject> impl
         Long count = subjectMapper.selectCount(wrapper);
         return count > 0;
     }
+
+    @Override
+    public Object getSubjectInfo(java.util.Map<String, Object> params) {
+        // 支持 subjectName/subjectCode 查询
+        String subjectName = (String) params.get("subjectName");
+        String subjectCode = (String) params.get("subjectCode");
+        LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
+        if (subjectName != null) wrapper.eq(Subject::getSubjectName, subjectName);
+        if (subjectCode != null) wrapper.eq(Subject::getSubjectCode, subjectCode);
+        List<Subject> list = this.list(wrapper);
+        if (list == null || list.isEmpty()) return "未找到相关科目";
+        return list.size() == 1 ? list.get(0) : list;
+    }
+
+    @Override
+    public Object getSubjectCount(java.util.Map<String, Object> params) {
+        // 支持按科目名、代码统计
+        String subjectName = (String) params.get("subjectName");
+        String subjectCode = (String) params.get("subjectCode");
+        LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
+        if (subjectName != null) wrapper.eq(Subject::getSubjectName, subjectName);
+        if (subjectCode != null) wrapper.eq(Subject::getSubjectCode, subjectCode);
+        return this.count(wrapper);
+    }
 } 

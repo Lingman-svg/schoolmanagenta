@@ -2,7 +2,7 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-26 16:10:00
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-26 16:21:55
+ * @LastEditTime: 2025-05-10 17:21:29
  * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\service\GradeService.java
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -17,6 +17,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 成绩服务接口
@@ -93,5 +94,12 @@ public interface GradeService extends IService<Grade> {
      * @throws IOException IO 异常
      */
     void exportGrades(HttpServletResponse response, GradeQuery query) throws IOException;
+
+    /**
+     * AI路由专用：根据参数Map查询学生成绩（支持姓名/学号+科目名等）
+     * @param params 参数Map（如studentName/Number, subjectName等）
+     * @return 查询结果（可为StudentGradeInfo/GradeDto/自定义结构）
+     */
+    Object getStudentGrade(Map<String, Object> params);
 
 } 

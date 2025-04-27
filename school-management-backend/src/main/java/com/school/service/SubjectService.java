@@ -1,3 +1,11 @@
+/*
+ * @Author: LingMeng 2663421939@qq.com
+ * @Date: 2025-04-25 21:48:21
+ * @LastEditors: LingMeng 2663421939@qq.com
+ * @LastEditTime: 2025-05-10 17:32:53
+ * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\service\SubjectService.java
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 package com.school.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 科目 Service 接口
@@ -79,5 +88,15 @@ public interface SubjectService extends IService<Subject> {
      * @throws IOException IO异常
      */
     String importSubjects(MultipartFile file) throws IOException;
+
+    /**
+     * AI路由专用：根据参数Map查询科目信息
+     */
+    Object getSubjectInfo(Map<String, Object> params);
+
+    /**
+     * AI路由专用：根据参数Map统计科目数量
+     */
+    Object getSubjectCount(Map<String, Object> params);
 
 } 

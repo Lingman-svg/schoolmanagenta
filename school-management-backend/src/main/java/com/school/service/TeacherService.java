@@ -1,3 +1,11 @@
+/*
+ * @Author: LingMeng 2663421939@qq.com
+ * @Date: 2025-04-25 23:07:50
+ * @LastEditors: LingMeng 2663421939@qq.com
+ * @LastEditTime: 2025-05-10 17:22:23
+ * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\service\TeacherService.java
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 package com.school.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 教师 Service 接口
@@ -80,5 +89,15 @@ public interface TeacherService extends IService<Teacher> {
     List<Teacher> listValidTeachersForSelection();
 
     boolean existsById(Long id); // Add this if not present
+
+    /**
+     * AI路由专用：根据参数Map查询教师信息
+     */
+    Object getTeacherInfo(Map<String, Object> params);
+
+    /**
+     * AI路由专用：根据参数Map查询教师所授科目
+     */
+    Object getTeacherSubjects(Map<String, Object> params);
 
 } 

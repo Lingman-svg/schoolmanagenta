@@ -2,17 +2,19 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-25 23:09:30
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-26 01:06:25
+ * @LastEditTime: 2025-05-10 17:31:45
  * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\service\impl\TeacherServiceImpl.java
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 package com.school.service.impl;
 
+import com.school.entity.Subject;
 import com.school.entity.Teacher;
 import com.school.entity.TeacherSubject;
 import com.school.entity.query.TeacherQuery;
 import com.school.mapper.TeacherMapper;
 import com.school.mapper.TeacherSubjectMapper;
+import com.school.service.SubjectService;
 import com.school.service.TeacherService;
 import com.school.utils.ExcelUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -31,6 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +46,7 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
 
     private final TeacherMapper teacherMapper;
     private final TeacherSubjectMapper teacherSubjectMapper;
+    private final SubjectService subjectService;
 
     @Override
     public IPage<Teacher> findTeachersByPage(TeacherQuery query) {
@@ -274,5 +278,51 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, Teacher> impl
     @Override
     public boolean existsById(Long id) {
         return baseMapper.exists(new LambdaQueryWrapper<Teacher>().eq(Teacher::getId, id));
+    }
+
+    @Override
+    public Object getTeacherInfo(Map<String, Object> params) {
+        // 支持 teacherName/teacherNumber
+        String teacherName = (String) params.get("teacherName");
+        String teacherNumber = (String) params.get("teacherNumber");
+        Teacher teacher = null;
+//        if (teacherNumber != null) {
+//            teacher = this.lambdaQuery().eq(Teacher::getTeacherNumber, teacherNumber).one();
+//        }
+        if (teacher == null && teacherName != null) {
+            teacher = this.lambdaQuery().eq(Teacher::getTeacherName, teacherName).one();
+        }
+        if (teacher == null) {
+            return "未找到该教师";
+        }
+        return teacher;
+    }
+
+    @Override
+    public Object getTeacherSubjects(Map<String, Object> params) {
+        // 支持 teacherName/teacherNumber
+        String teacherName = (String) params.get("teacherName");
+        String teacherNumber = (String) params.get("teacherNumber");
+        Teacher teacher = null;
+//        if (teacherNumber != null) {
+//            teacher = this.lambdaQuery().eq(Teacher::getTeacherNumber, teacherNumber).one();
+//        }
+        if (teacher == null && teacherName != null) {
+            teacher = this.lambdaQuery().eq(Teacher::getTeacherName, teacherName).one();
+        }
+        if (teacher == null) {
+            return "未找到该教师";
+        }
+        // 查询教师所授科目
+        List<TeacherSubject> tsList = teacherSubjectMapper.selectList(
+                new LambdaQueryWrapper<TeacherSubject>()
+                .eq(TeacherSubject::getTeacherId, teacher.getId())
+        );
+        if (tsList == null || tsList.isEmpty()) {
+            return "该教师没有授课科目信息";
+        }
+        List<Long> subjectIds = tsList.stream().map(TeacherSubject::getSubjectId).toList();
+        List<Subject> subjects = subjectService.listByIds(subjectIds);
+        return subjects;
     }
 }

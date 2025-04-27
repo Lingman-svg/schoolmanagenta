@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 学生服务接口
@@ -89,6 +90,16 @@ public interface StudentService extends IService<Student> {
      * @return 班级历史记录列表 (包含班级名称)
      */
     List<StudentClazzHistoryDto> getClassChangeHistory(Long studentId);
+
+    /**
+     * AI路由专用：根据参数Map查询学生信息
+     */
+    Object getStudentInfo(Map<String, Object> params);
+
+    /**
+     * AI路由专用：根据参数Map统计学生数量
+     */
+    Object getStudentCount(Map<String, Object> params);
 
      // TODO: 添加处理班级关联、变更历史的方法
      // boolean assignClass(Long studentId, Long clazzId);

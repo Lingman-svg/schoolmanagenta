@@ -340,4 +340,30 @@ public class ClazzServiceImpl extends ServiceImpl<ClazzMapper, Clazz> implements
         // wrapper.select(Clazz::getId, Clazz::getClassName);
         return this.list(wrapper);
     }
+
+    @Override
+    public Object getClazzInfo(java.util.Map<String, Object> params) {
+        // 支持 className/grade/teacherId 查询
+        String className = (String) params.get("className");
+        String grade = (String) params.get("grade");
+        Long teacherId = params.get("teacherId") instanceof Long ? (Long) params.get("teacherId") : null;
+        LambdaQueryWrapper<Clazz> wrapper = new LambdaQueryWrapper<>();
+        if (className != null) wrapper.eq(Clazz::getClassName, className);
+        if (grade != null) wrapper.eq(Clazz::getGrade, grade);
+        if (teacherId != null) wrapper.eq(Clazz::getTeacherId, teacherId);
+        List<Clazz> list = this.list(wrapper);
+        if (list == null || list.isEmpty()) return "未找到相关班级";
+        return list.size() == 1 ? list.get(0) : list;
+    }
+
+    @Override
+    public Object getClazzCount(java.util.Map<String, Object> params) {
+        // 支持按年级、班主任统计
+        String grade = (String) params.get("grade");
+        Long teacherId = params.get("teacherId") instanceof Long ? (Long) params.get("teacherId") : null;
+        LambdaQueryWrapper<Clazz> wrapper = new LambdaQueryWrapper<>();
+        if (grade != null) wrapper.eq(Clazz::getGrade, grade);
+        if (teacherId != null) wrapper.eq(Clazz::getTeacherId, teacherId);
+        return this.count(wrapper);
+    }
 } 
