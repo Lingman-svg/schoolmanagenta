@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class CourseController {
 
     @Operation(summary = "根据条件分页查询课程安排")
     @GetMapping
+    @PreAuthorize("hasAuthority('base:course:list') or hasAuthority('base:course:view')")
     public R<IPage<?>> listCoursesByPage(CourseQuery query) { // 返回 IPage<?>，因为 Service 可能返回 Course 或 VO
         log.info("根据条件分页查询课程安排，参数: {}", query);
         IPage<?> page = courseService.findCoursesByPage(query);
@@ -41,6 +43,7 @@ public class CourseController {
 
     @Operation(summary = "根据ID查询课程安排详情")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:course:view')")
     public R<Course> getCourseById(@PathVariable @Parameter(description = "课程安排ID") Long id) {
         log.info("根据ID查询课程安排详情，ID: {}", id);
         Course course = courseService.getById(id);
@@ -50,6 +53,7 @@ public class CourseController {
 
     @Operation(summary = "新增课程安排")
     @PostMapping
+    @PreAuthorize("hasAuthority('base:course:add')")
     public R<Void> addCourse(@Validated @RequestBody Course course) { // 使用 @Validated 校验 Course 实体中的注解
         log.info("新增课程安排，参数: {}", course);
         boolean success = courseService.addCourse(course); // 调用包含校验的 Service 方法
@@ -58,6 +62,7 @@ public class CourseController {
 
     @Operation(summary = "修改课程安排")
     @PutMapping
+    @PreAuthorize("hasAuthority('base:course:edit')")
     public R<Void> updateCourse(@Validated @RequestBody Course course) {
         log.info("修改课程安排，参数: {}", course);
         // Controller 层基础校验
@@ -70,6 +75,7 @@ public class CourseController {
 
     @Operation(summary = "根据ID删除课程安排")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:course:delete')")
     public R<Void> deleteCourseById(@PathVariable @Parameter(description = "课程安排ID") Long id) {
         log.info("根据ID删除课程安排，ID: {}", id);
         // Service 层 removeById (来自 IService) 默认只做逻辑删除
@@ -80,6 +86,7 @@ public class CourseController {
 
     @Operation(summary = "批量删除课程安排")
     @DeleteMapping("/batch")
+    @PreAuthorize("hasAuthority('base:course:delete')")
     public R<Void> deleteBatchCourses(@RequestBody @Parameter(description = "要删除的课程安排ID列表") List<Long> ids) {
         log.info("批量删除课程安排，IDs: {}", ids);
         if (ids == null || ids.isEmpty()) {

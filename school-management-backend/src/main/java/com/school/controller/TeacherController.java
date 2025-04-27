@@ -7,6 +7,7 @@ import com.school.service.TeacherService;
 import com.school.utils.R;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +36,7 @@ public class TeacherController {
      * @return 分页结果
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('base:teacher:list') or hasAuthority('base:teacher:view')")
     public R<IPage<Teacher>> list(TeacherQuery query) {
         IPage<Teacher> page = teacherService.findTeachersByPage(query);
         return R.success(page);
@@ -46,6 +48,7 @@ public class TeacherController {
      * @return 教师详情
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:teacher:view')")
     public R<Teacher> getInfo(@PathVariable Long id) {
         Teacher teacher = teacherService.getTeacherDetailById(id);
         return R.result(teacher != null, teacher);
@@ -57,6 +60,7 @@ public class TeacherController {
      * @return 操作结果
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('base:teacher:add')")
     public R<Void> add(@Validated @RequestBody Teacher teacher) {
         boolean success = teacherService.addTeacher(teacher);
         return R.result(success);
@@ -68,6 +72,7 @@ public class TeacherController {
      * @return 操作结果
      */
     @PutMapping
+    @PreAuthorize("hasAuthority('base:teacher:edit')")
     public R<Void> edit(@Validated @RequestBody Teacher teacher) {
         if (teacher.getId() == null) {
             return R.fail("修改失败：教师ID不能为空");
@@ -82,6 +87,7 @@ public class TeacherController {
      * @return 操作结果
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:teacher:delete')")
     public R<Void> remove(@PathVariable Long id) {
         boolean success = teacherService.deleteTeacherById(id);
         return R.result(success);
@@ -93,6 +99,7 @@ public class TeacherController {
      * @return 操作结果
      */
     @DeleteMapping("/batch/{ids}")
+    @PreAuthorize("hasAuthority('base:teacher:delete')")
     public R<Void> removeBatch(@PathVariable List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return R.fail("请选择要删除的教师");
@@ -118,6 +125,7 @@ public class TeacherController {
      * @param query 查询条件
      */
     @PostMapping("/export")
+    @PreAuthorize("hasAuthority('base:teacher:export') or hasAuthority('base:teacher:list')")
     public void export(HttpServletResponse response, TeacherQuery query) {
         try {
             teacherService.exportTeachers(response, query);
@@ -133,6 +141,7 @@ public class TeacherController {
      * @return 导入结果信息
      */
     @PostMapping("/import")
+    @PreAuthorize("hasAuthority('base:teacher:import') or hasAuthority('base:teacher:add') or hasAuthority('base:teacher:edit')")
     public R<String> importData(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return R.fail("上传文件不能为空");

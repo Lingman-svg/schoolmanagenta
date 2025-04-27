@@ -93,6 +93,31 @@
       <version>2.5.0</version> <!-- 使用与 Spring Boot 3.2.x 兼容的版本 -->
     </dependency>
 
+    <!-- Spring Security -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <!-- JWT Dependencies -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-api</artifactId>
+        <version>0.12.5</version> <!-- 使用较新版本 -->
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-impl</artifactId>
+        <version>0.12.5</version>
+        <scope>runtime</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt-jackson</artifactId> 
+        <version>0.12.5</version>
+        <scope>runtime</scope>
+    </dependency>
+
     <!-- 移除旧的 JUnit 4 依赖 -->
     <!--
     <dependency>
@@ -102,6 +127,14 @@
       <scope>test</scope>
     </dependency>
     -->
+
+    <!-- Alibaba Cloud AI SDK Starter -->
+    <dependency>
+      <groupId>com.alibaba.cloud.ai</groupId>
+      <artifactId>spring-ai-alibaba-starter</artifactId>
+      <version>1.0.0-M6.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>

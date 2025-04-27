@@ -1,11 +1,3 @@
-<!--
- * @Author: LingMeng 2663421939@qq.com
- * @Date: 2025-04-25 21:28:40
- * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-27 00:24:09
- * @FilePath: \schoolmanagenta\TODO.md
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
--->
 # 小学学生管理系统开发计划 (TODO)
 
 **重要提示:**
@@ -142,13 +134,13 @@
         *   [ ] 将页面逻辑抽离到 `courseTime.config.js`。
     *   **备注:** 完成时间: 2024-05-12 (前后端)。实现思路: 后端完成 CRUD、分页查询及校验逻辑 (包括时间段重叠)。前端完成对应页面，使用 VxeTable 和 Element Plus，实现数据展示和交互，并能正确处理后端的校验错误信息。
 
-*   [ ] **9. 模块：课程管理 (Course)**
+*   [x] **9. 模块：课程管理 (Course)**
     *   **后端:**
         *   [x] 创建 `Course` 实体类, `CourseQuery`。
         *   [x] 创建 `CourseMapper` 接口及 XML。
         *   [x] 创建 `CourseService` 接口及实现。
         *   [x] 创建 `CourseController`。
-        *   [ ] 实现时间冲突校验逻辑 (在 Service/Mapper 中)。
+        *   [x] 实现时间冲突校验逻辑 (在 Service/Mapper 中)。
         *   [ ] 编写测试。
     *   **前端:**
         *   [x] 创建 `CourseManagement.vue` 页面 (使用 FullCalendar)。
@@ -160,7 +152,7 @@
         *   [ ] 实现导入导出功能。
         *   [ ] 班级、教师、节课使用下拉选择 (已在弹窗内实现)。
         *   [ ] 将页面逻辑抽离到 `course.config.js` (按需进行)。
-    *   **备注:** 完成时间: 2024-05-13 (前端主要功能), 2024-05-13 (后端基础结构)。实现思路: 前端使用 FullCalendar。后端基础 CRUD 结构已存在，但缺少具体的业务校验逻辑（如时间冲突）和单元测试。
+    *   **备注:** 完成时间: 2024-05-13 (前端主要功能), 2024-05-13 (后端基础结构)。实现思路: 前端使用 FullCalendar。后端基础 CRUD 结构已存在。**时间冲突校验已在 `CourseServiceImpl` 的 `checkConflict` 方法中通过 `exists` 查询实现 (2024-05-14)，覆盖了班级、教师、地点三个维度的冲突。** 后续需补充单元测试。
 
 *   [x] **10. 模块：成绩管理 (Grade/Score)**
     *   **后端:**
@@ -184,33 +176,33 @@
 
 ## 第三阶段：系统管理功能
 
-*   [ ] **11. 模块：系统参数 (SystemConfig)**
+*   [x] **11. 模块：系统参数 (SystemConfig)**
     *   **后端/前端:** 实现简单的键值对配置管理。
-    *   **备注:**
+    *   **备注:** 完成时间: 2024-05-14。实现思路: 后端创建 Entity, Mapper, Service, Controller 实现基础 CRUD API，并添加校验逻辑 (key 唯一性，系统内置参数限制)。前端创建 API 文件 (`system.js`) 和 Vue 组件 (`SystemConfigManagement.vue`)，使用 Element Plus 构建页面，实现查询、展示、新增、修改、删除功能，并遵循项目前端代码规范。
 
-*   [ ] **12. 模块：用户管理 (User)**
-    *   **后端/前端:** 实现用户增删改查，关联角色。
-    *   **备注:**
+*   [x] **12. 模块：用户管理 (User)**
+    *   **后端/前端:** 实现用户增删改查，关联角色，密码加密存储。
+    *   **备注:** 完成时间: 2024-05-15。实现思路: 后端完成 Entity, Mapper, Service, Controller，实现 CRUD、分页查询、角色关联、DTO/VO、密码加密(BCrypt)。前端完成 API、Vue 页面、路由、菜单，实现用户列表展示、查询、分页、新增、修改、删除、状态修改、重置密码、角色选择。**剩余:** 权限认证与授权 (属于权限模块), 前端日期范围查询、导入导出、**[TODO] 实现分配角色功能 (单独按钮/界面)**。
 
-*   [ ] **13. 模块：角色管理 (Role)**
+*   [x] **13. 模块：角色管理 (Role)**
     *   **后端/前端:** 实现角色增删改查，关联权限(菜单/按钮)。
-    *   **备注:**
+    *   **备注:** 完成时间: 2024-05-14。实现思路: 后端创建 Entity (Role, RoleMenu), Mapper (RoleMapper, RoleMenuMapper), Service (RoleService), Controller (RoleController)，实现角色 CRUD、分页查询、状态修改、唯一性校验以及角色菜单关联。前端创建 API 文件 (`role.js`) 和 Vue 组件 (`RoleManagement.vue`)，使用 VxeTable 和 Element Plus Dialog/Form/Tree，实现角色展示、查询、分页、增删改、状态修改、菜单权限分配功能，并保持 UI 一致性。
 
-*   [ ] **14. 模块：菜单管理 (Menu)**
+*   [x] **14. 模块：菜单管理 (Menu)**
     *   **后端/前端:** 实现菜单(目录、菜单、按钮)的增删改查，用于动态路由和权限控制。
-    *   **备注:**
+    *   **备注:** 完成时间: 2024-05-14。实现思路: 后端创建 Entity (Menu, dto.MenuNode, vo.TreeSelect), Mapper (MenuMapper, 空 RoleMenuMapper), Service, Controller，实现菜单 CRUD、树构建和校验逻辑。前端创建 API 文件 (`menu.js`) 和 Vue 组件 (`MenuManagement.vue`)，使用 Element Plus TreeTable 和 TreeSelect，实现树形展示、查询、新增、修改、删除菜单功能。修复了 Linter 错误，添加了路由。
 
-*   [ ] **15. 模块：权限管理 (Permission)**
+*   [x] **15. 模块：权限管理 (Permission)**
     *   **后端:**
-        *   [ ] 实现基于 RBAC (Role-Based Access Control) 的权限校验逻辑 (整合 Spring Security)。
+        *   [x] 实现基于 RBAC (Role-Based Access Control) 的权限校验逻辑 (整合 Spring Security, 方法级 @PreAuthorize)。 (完成时间: 2024-05-16) 实现思路: 添加 Spring Security 依赖, 配置 SecurityConfig (禁用 CSRF, 启用 CORS, 配置认证入口/处理器, 注册 JWT 过滤器), 实现 UserDetailsServiceImpl 加载用户及权限, 实现 JwtAuthenticationTokenFilter 校验 Token, 在 Controller 方法上使用 @PreAuthorize("hasAuthority(...)")。
         *   [ ] 定义权限注解或配置。
-        *   [ ] 实现用户登录、登出、JWT Token 生成与校验。
+        *   [x] 实现用户登录、登出、JWT Token 生成与校验。 (完成时间: 2024-05-15/16) 实现思路: 后端创建 LoginController 处理登录(/login)和登出(/logout)请求, 创建 AuthService 处理认证逻辑并生成 JWT, 创建 JwtUtil 生成/解析 Token, SecurityConfig 中配置登录端点。 前端创建 Pinia store 管理 Token, 在登录成功后存储 Token, 在请求头中携带 Token, 实现登出逻辑。
     *   **前端:**
-        *   [ ] 实现登录页面。
-        *   [ ] 根据用户权限动态生成菜单。
-        *   [ ] 实现路由守卫进行权限拦截。
-        *   [ ] 控制按钮级权限显示。
-    *   **备注:**
+        *   [x] 实现登录页面。 (完成时间: 2024-05-15) 实现思路: 创建 UserLogin.vue 页面, 使用 Element Plus Form 组件, 对接 /login API。
+        *   [x] 根据用户权限动态生成菜单。 (完成时间: 2024-05-16) 实现思路: 在 App.vue 中修改 `filterAndBuildMenu` 函数读取路由 `meta.permission`, 在模板中使用 `v-permission` 指令控制 `el-menu-item` 和 `el-sub-menu` 的渲染。
+        *   [x] 实现路由守卫进行权限拦截。 (完成时间: 2024-05-15) 实现思路: 在 router/index.js 中使用 `router.beforeEach` 进行导航守卫, 判断 Token 和用户信息, 无 Token 或获取信息失败则重定向到登录页。
+        *   [x] 控制按钮级权限显示。 (完成时间: 2024-05-16) 实现思路: 创建 `directives/permission.js` 自定义指令, 在 `mounted` 钩子中检查用户权限并移除无权限元素, 全局注册指令, 在 Vue 模板中使用 `v-permission="'xxx:xxx:xxx'"`。
+    *   **备注:** 完成时间: 2024-05-16 (前后端权限控制主要功能)。权限标识符需在数据库、后端注解、前端路由、前端指令中保持严格一致。`LessonController` 问题已澄清并确认当前配置正确。
 
 *   [ ] **16. 模块：日志管理 (Log)**
     *   **后端:**

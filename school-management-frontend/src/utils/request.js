@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ElMessage, ElMessageBox } from 'element-plus' // 引入 Element Plus 消息提示
-// import store from '@/store' // 如果需要访问 Pinia store (例如获取 token)
+import { useUserStore } from '@/stores/user'; // 导入 Pinia store
 // import { getToken } from '@/utils/auth' // 假设有获取 token 的工具函数
 
 // 1. 创建 Axios 实例
@@ -17,11 +17,13 @@ const service = axios.create({
 service.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
-    // 例如，添加 Token
-    // const hasToken = getToken()
-    // if (hasToken) {
-    //   config.headers['Authorization'] = 'Bearer ' + hasToken // 或者其他 Token 格式
-    // }
+    const userStore = useUserStore(); // 在拦截器内部获取 store 实例
+    const hasToken = userStore.token;
+
+    if (hasToken) {
+      // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['Authorization'] = 'Bearer ' + hasToken;
+    }
 
     // get 请求映射 params 参数，防止缓存
     if (config.method === 'get' && config.params) {

@@ -2,7 +2,7 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-25 21:35:19
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-25 23:06:47
+ * @LastEditTime: 2025-04-27 20:30:59
  * @FilePath: \schoolmanagenta\school-management-frontend\src\main.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -30,6 +30,7 @@ import VxeUITable from 'vxe-table'
 
 import App from './App.vue'
 import router from './router'
+import permissionDirective from './directives/permission'; // 导入权限指令
 
 // --- Axios (后面会封装) --- (需要先安装: npm install axios)
 // import axios from 'axios'
@@ -38,6 +39,9 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
+// 全局注册权限指令
+app.directive('permission', permissionDirective);
 
 // --- 注册 Element Plus ---
 // size 用于设置表单组件的默认尺寸，locale 用于设置语言

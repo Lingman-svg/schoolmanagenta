@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid; // For validating request body
 import jakarta.validation.constraints.*; // Import validation constraints
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize; // 导入
 import org.springframework.validation.annotation.Validated; // For controller level validation
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +38,7 @@ public class StudentController {
      * 分页查询学生列表
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('base:student:list') or hasAuthority('base:student:view')")
     public R<Page<Student>> list(StudentQuery query) {
         // TODO: Consider returning a DTO with class name instead of just Student entity
         Page<Student> page = studentService.listStudents(query);
@@ -47,6 +49,7 @@ public class StudentController {
      * 根据ID获取学生详情
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:student:view')")
     public R<Student> getInfo(@NotNull @Min(value = 1, message = "ID必须为正整数") @PathVariable Long id) {
         // TODO: Consider returning a DTO with class name
         Student student = studentService.getStudentInfo(id);
@@ -62,6 +65,7 @@ public class StudentController {
      * 新增学生
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('base:student:add')")
     public R<Void> add(@Valid @RequestBody Student student) {
         // @Valid triggers validation based on annotations in Student entity (if any)
         boolean success = studentService.addStudent(student);
@@ -72,6 +76,7 @@ public class StudentController {
      * 修改学生
      */
     @PutMapping
+    @PreAuthorize("hasAuthority('base:student:edit')")
     public R<Void> edit(@Valid @RequestBody Student student) {
         // @Valid triggers validation
         if (student.getId() == null || student.getId() <= 0) {
@@ -85,6 +90,7 @@ public class StudentController {
      * 删除学生
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:student:delete')")
     public R<Void> remove(@NotNull @Min(value = 1, message = "ID必须为正整数") @PathVariable Long id) {
         boolean success = studentService.deleteStudentLogically(id);
         return R.result(success);
@@ -94,6 +100,7 @@ public class StudentController {
      * 批量删除学生
      */
     @DeleteMapping("/batch")
+    @PreAuthorize("hasAuthority('base:student:delete')")
     public R<Void> removeBatch(@NotEmpty(message = "删除ID列表不能为空") @RequestBody List<@NotNull @Min(value = 1, message = "ID必须为正整数") Long> ids) {
         boolean success = studentService.deleteStudentsLogicallyBatch(ids);
         return R.result(success);
@@ -103,6 +110,7 @@ public class StudentController {
      * 导出学生数据
      */
     @PostMapping("/export")
+    @PreAuthorize("hasAuthority('base:student:export') or hasAuthority('base:student:list')")
     public void export(@RequestBody(required = false) StudentQuery query, HttpServletResponse response) {
         // Allow query to be optional or empty for exporting all
         if (query == null) {
@@ -122,6 +130,7 @@ public class StudentController {
      * 导入学生数据
      */
     @PostMapping("/import")
+    @PreAuthorize("hasAuthority('base:student:import') or hasAuthority('base:student:add') or hasAuthority('base:student:edit')")
     public R<String> importData(@NotNull(message = "上传文件不能为空") @RequestPart("file") MultipartFile file) {
         try {
             String resultMsg = studentService.importStudents(file);
@@ -145,6 +154,7 @@ public class StudentController {
      * 获取学生班级变更历史
      */
     @GetMapping("/{id}/history")
+    @PreAuthorize("hasAuthority('base:student:view')")
     public R<List<StudentClazzHistoryDto>> getHistory(@NotNull @Min(value = 1, message = "学生ID必须为正整数") @PathVariable Long id) {
         List<StudentClazzHistoryDto> historyList = studentService.getClassChangeHistory(id);
         return R.success(historyList);

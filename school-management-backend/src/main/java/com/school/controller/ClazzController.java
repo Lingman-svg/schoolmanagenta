@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +43,7 @@ public class ClazzController {
      * 分页查询班级列表
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('base:class:list') or hasAuthority('base:class:view')")
     public R<Page<Clazz>> list(ClazzQuery query) { // Changed return type to R
         Page<Clazz> page = clazzService.listClazzes(query);
         return R.success(page); // Use R.success(data)
@@ -51,6 +53,7 @@ public class ClazzController {
      * 根据ID获取班级详情
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:class:view')")
     public R<Clazz> getInfo(@PathVariable Long id) { // Changed return type to R
         Clazz clazz = clazzService.getClazzInfo(id);
         // Consider returning R.fail if clazz is null?
@@ -61,6 +64,7 @@ public class ClazzController {
      * 新增班级
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('base:class:add')")
     public R<Void> add(@RequestBody Clazz clazz) { // Changed return type to R
         boolean success = clazzService.addClazz(clazz);
         return R.result(success); // Use R.result(boolean)
@@ -70,6 +74,7 @@ public class ClazzController {
      * 修改班级
      */
     @PutMapping
+    @PreAuthorize("hasAuthority('base:class:edit')")
     public R<Void> edit(@RequestBody Clazz clazz) { // Changed return type to R
         // Basic validation: ensure ID is present for update
         if (clazz.getId() == null) {
@@ -83,6 +88,7 @@ public class ClazzController {
      * 删除班级
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('base:class:delete')")
     public R<Void> remove(@PathVariable Long id) { // Changed return type to R
         boolean success = clazzService.deleteClazzLogically(id);
         return R.result(success); // Use R.result(boolean)
@@ -92,6 +98,7 @@ public class ClazzController {
      * 批量删除班级
      */
     @DeleteMapping("/batch")
+    @PreAuthorize("hasAuthority('base:class:delete')")
     public R<Void> removeBatch(@RequestBody List<Long> ids) { // Changed return type to R
          if (ids == null || ids.isEmpty()) {
             return R.fail("批量删除时ID列表不能为空"); // Use R.fail(msg)
@@ -104,6 +111,7 @@ public class ClazzController {
      * 导出班级数据
      */
     @PostMapping("/export")
+    @PreAuthorize("hasAuthority('base:class:export') or hasAuthority('base:class:list')")
     public void exportClazzes(@RequestBody ClazzQuery query, HttpServletResponse response) {
         List<Clazz> list = clazzService.listClazzesForExport(query);
         try {
@@ -117,6 +125,7 @@ public class ClazzController {
      * 导入班级数据
      */
     @PostMapping("/import")
+    @PreAuthorize("hasAuthority('base:class:import') or hasAuthority('base:class:add') or hasAuthority('base:class:edit')")
     public R<Void> importClazzes(@RequestPart("file") MultipartFile file) {
         if (file.isEmpty()) {
             return R.fail("上传的文件不能为空");
