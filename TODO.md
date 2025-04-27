@@ -204,13 +204,17 @@
         *   [x] 控制按钮级权限显示。 (完成时间: 2024-05-16) 实现思路: 创建 `directives/permission.js` 自定义指令, 在 `mounted` 钩子中检查用户权限并移除无权限元素, 全局注册指令, 在 Vue 模板中使用 `v-permission="'xxx:xxx:xxx'"`。
     *   **备注:** 完成时间: 2024-05-16 (前后端权限控制主要功能)。权限标识符需在数据库、后端注解、前端路由、前端指令中保持严格一致。`LessonController` 问题已澄清并确认当前配置正确。
 
-*   [ ] **16. 模块：日志管理 (Log)**
+*   [x] **16. 模块：日志管理 (Log)**
     *   **后端:**
-        *   [ ] 使用 AOP 或拦截器记录操作日志 (记录请求信息、操作用户、结果等)。
-        *   [ ] 创建 `Log` 实体类及相关 Mapper/Service/Controller。
+        *   [x] 使用 AOP 或拦截器记录操作日志 (记录请求信息、操作用户、结果等)。
+        *   [x] 创建 `Log` 实体类及相关 Mapper/Service/Controller。
+        *   [x] 创建 `@Log` 注解、`LogAspect` 切面、`BusinessType` 常量，并在各 Controller 添加注解。
+        *   [x] 启用异步 `@EnableAsync`。
     *   **前端:**
-        *   [ ] 创建 `LogManagement.vue` 页面展示操作日志。
-    *   **备注:**
+        *   [x] 创建 `LogManagement.vue` 页面展示操作日志。
+        *   [x] 创建 `log.js` API 文件。
+        *   [x] 添加前端路由。
+    *   **备注:** 完成时间: 2024-05-17 (基本功能)。实现思路: 后端使用 AOP + 自定义注解拦截 Controller 方法，异步保存日志到 `sys_log` 表。前端创建页面、API、路由。**待办:** 需手动创建 `sys_log` 数据库表，并在 `sys_menu` 表中插入菜单 SQL。
 
 ## 第四阶段：AI 功能集成 (优先级最低)
 
@@ -218,13 +222,14 @@
     *   **后端:**
         *   [ ] 添加 `spring-cloud-starter-alibaba-ai` 依赖。
         *   [ ] 阅读官方文档: <https://java2ai.com/docs/1.0.0-M6.1/overview/>。
-        *   [ ] 配置 AI 服务 (选择模型, base_url, key 等)。
-        *   [ ] 创建 `AiService` 用于与 AI SDK 交互。
-        *   [ ] 创建 Controller 接口接收聊天请求。
+        *   [x] 配置 AI 服务 (选择模型, base_url, key 等)。 (完成时间: 2024-05-17, 实现思路: 在 application.yml 中添加 spring.cloud.ai 相关配置, API Key 需手动填入)
+        *   [x] 创建 `AiService` 用于与 AI SDK 交互。 (完成时间: 2024-05-17, 实现思路: 创建 AiService 接口和 AiServiceImpl 实现, 注入 ChatClient.Builder, 注册函数回调)
+        *   [x] 创建 Controller 接口接收聊天请求。 (完成时间: 2024-05-17, 实现思路: 创建 AiController, 注入 AiService, 处理 /ai/chat POST 请求)
+        *   [x] 定义后端 AI 函数调用 (Function Calling)。 (完成时间: 2025-04-27, 实现思路: 使用 Spring AI Function Callback 机制在 AiFunctionConfig 中定义多个 Bean 作为 AI 可调用的函数，处理科目、学生、教师、课程、成绩查询。)
         *   [ ] 实现将自然语言指令解析并调用对应业务 Service 的逻辑。
         *   [ ] 探索模型调优可能性。
     *   **前端:**
-        *   [ ] (可选) 创建一个聊天界面与后端 AI 接口交互。
+        *   [x] (可选) 创建一个聊天界面与后端 AI 接口交互。 (完成时间: 2025-04-27, 实现思路: 创建 AiChat.vue, 使用 marked, hljs, DOMPurify 实现 Markdown 渲染和代码高亮/复制)
     *   **文档:**
         *   [ ] 编写 AI 功能使用及调优文档。
     *   **备注:**

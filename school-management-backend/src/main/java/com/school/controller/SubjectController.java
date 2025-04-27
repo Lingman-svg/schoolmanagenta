@@ -1,6 +1,8 @@
 package com.school.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.school.annotation.Log; // Import Log annotation
+import com.school.constant.BusinessType; // Import BusinessType constants
 import com.school.entity.Subject;
 import com.school.entity.query.SubjectQuery;
 import com.school.service.SubjectService;
@@ -8,6 +10,7 @@ import com.school.utils.R; // 引入统一响应结果类
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid; // 用于 @Valid 注解
+import org.springframework.security.access.prepost.PreAuthorize; // 导入 PreAuthorize
 import org.springframework.validation.annotation.Validated; // 用于 @Validated 注解
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +38,7 @@ public class SubjectController {
      * 分页查询科目列表
      * 使用 @Validated 注解来校验 SubjectQuery 中的分页参数 (如果 PageDomain 中有约束)
      */
+    @PreAuthorize("hasAuthority('resource:subject:list')") // Added permission
     @GetMapping
     public R<IPage<Subject>> list(SubjectQuery query) {
         IPage<Subject> page = subjectService.findSubjectsByPage(query);
@@ -43,9 +47,12 @@ public class SubjectController {
 
     /**
      * 获取所有有效科目列表 (用于下拉)
+     * 这个通常不需要特定权限，或者与 list 权限相同
      */
     @Operation(summary = "获取所有有效科目列表 (用于下拉)")
+    @PreAuthorize("hasAuthority('resource:subject:list')") // Assuming same permission as list
     @GetMapping("/valid")
+    // @PreAuthorize("permitAll()") // 或者根据需要添加权限，例如 'base:subject:list'
     public R<List<Subject>> listValid() {
         log.info("获取所有有效科目列表");
         List<Subject> list = subjectService.findAllValidSubjects();
@@ -55,6 +62,7 @@ public class SubjectController {
     /**
      * 根据 ID 获取科目详情
      */
+    @PreAuthorize("hasAuthority('resource:subject:view')") // Added permission
     @GetMapping("/{id}")
     public R<Subject> getById(@PathVariable Long id) {
         Subject subject = subjectService.getById(id);
@@ -65,6 +73,8 @@ public class SubjectController {
      * 新增科目
      * 使用 @Valid 注解校验 Subject 实体中的约束 (@NotBlank 等)
      */
+    @PreAuthorize("hasAuthority('resource:subject:add')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.INSERT)
     @PostMapping
     public R<Void> add(@Valid @RequestBody Subject subject) {
         boolean success = subjectService.addSubject(subject);
@@ -74,6 +84,8 @@ public class SubjectController {
     /**
      * 修改科目
      */
+    @PreAuthorize("hasAuthority('resource:subject:edit')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public R<Void> update(@Valid @RequestBody Subject subject) {
         if (subject.getId() == null) {
@@ -86,6 +98,8 @@ public class SubjectController {
     /**
      * 删除科目
      */
+    @PreAuthorize("hasAuthority('resource:subject:delete')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{id}")
     public R<Void> delete(@PathVariable Long id) {
         boolean success = subjectService.deleteSubjectById(id);
@@ -96,6 +110,8 @@ public class SubjectController {
      * 批量删除科目
      * @param ids ID列表, 例如: [1, 2, 3]
      */
+    @PreAuthorize("hasAuthority('resource:subject:delete')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/batch")
     public R<Void> deleteBatch(@RequestBody List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
@@ -107,7 +123,10 @@ public class SubjectController {
 
     /**
      * 导出科目数据
+     * 通常与 list 权限一致
      */
+    @PreAuthorize("hasAuthority('resource:subject:export')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export") // 使用 POST 方便传递查询条件
     public void export(HttpServletResponse response, @RequestBody SubjectQuery query) throws IOException {
         // 注意：导出方法通常没有返回值 (void)，直接操作 response 输出流
@@ -117,7 +136,10 @@ public class SubjectController {
     /**
      * 导入科目数据
      * @param file 上传的 Excel 文件
+     * 通常需要添加或编辑权限
      */
+    @PreAuthorize("hasAuthority('resource:subject:import')") // Added permission
+    @Log(title = "科目管理", businessType = BusinessType.IMPORT)
     @PostMapping("/import")
     public R<String> importSubjects(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {

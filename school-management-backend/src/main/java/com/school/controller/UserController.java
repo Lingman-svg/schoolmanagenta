@@ -1,5 +1,7 @@
 package com.school.controller;
 
+import com.school.annotation.Log;
+import com.school.constant.BusinessType;
 import com.school.entity.User;
 import com.school.service.UserService;
 import com.school.utils.R;
@@ -24,7 +26,7 @@ import java.util.List;
  * @since 2024-05-15
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/system/user")
 public class UserController {
 
     @Autowired
@@ -57,7 +59,8 @@ public class UserController {
     /**
      * 新增用户
      */
-    @PreAuthorize("hasAuthority('base:user:add')")
+    @PreAuthorize("hasAuthority('system:user:add')")
+    @Log(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
     public R<Void> add(@Valid @RequestBody UserDto userDto) {
         // 用户名唯一性校验
@@ -74,7 +77,8 @@ public class UserController {
     /**
      * 修改用户
      */
-    @PreAuthorize("hasAuthority('base:user:edit')")
+    @PreAuthorize("hasAuthority('system:user:edit')")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public R<Void> edit(@Valid @RequestBody UserDto userDto) {
         // 用户名唯一性校验 (排除自身)
@@ -92,7 +96,8 @@ public class UserController {
     /**
      * 删除用户
      */
-    @PreAuthorize("hasAuthority('base:user:delete')")
+    @PreAuthorize("hasAuthority('system:user:delete')")
+    @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userIds}")
     public R<Void> remove(@PathVariable Long[] userIds) {
         boolean success = userService.deleteUserByIds(userIds);
@@ -102,7 +107,8 @@ public class UserController {
      /**
      * 重置密码
      */
-    @PreAuthorize("hasAuthority('base:user:resetPwd')")
+    @PreAuthorize("hasAuthority('system:user:resetPwd')")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/resetPwd")
     public R<Void> resetPwd(@RequestBody UserDto userDto) {
         // TODO: 校验用户是否存在等
@@ -118,7 +124,8 @@ public class UserController {
     /**
      * 状态修改
      */
-    @PreAuthorize("hasAuthority('base:user:edit')")
+    @PreAuthorize("hasAuthority('system:user:edit')")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public R<Void> changeStatus(@RequestBody UserDto userDto) {
         // 只需传递 userId 和 isValid 状态

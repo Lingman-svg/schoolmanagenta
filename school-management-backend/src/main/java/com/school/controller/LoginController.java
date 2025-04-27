@@ -2,12 +2,14 @@
  * @Author: LingMeng 2663421939@qq.com
  * @Date: 2025-04-27 19:53:19
  * @LastEditors: LingMeng 2663421939@qq.com
- * @LastEditTime: 2025-04-27 20:25:29
+ * @LastEditTime: 2025-04-27 22:37:26
  * @FilePath: \schoolmanagenta\school-management-backend\src\main\java\com\school\controller\LoginController.java
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 package com.school.controller;
 
+import com.school.annotation.Log;
+import com.school.constant.BusinessType;
 import com.school.entity.dto.LoginDto;
 import com.school.service.AuthService; // 假设我们创建一个 AuthService
 import com.school.utils.R;
@@ -42,6 +44,7 @@ public class LoginController {
      * @return 结果 (后续会返回 Token)
      */
     @PostMapping("/login")
+    @Log(title = "用户登录", businessType = BusinessType.LOGIN, isSaveRequestData = false, isSaveResponseData = false) // 不记录请求体(密码)和返回体(token)
     public R<?> login(@Valid @RequestBody LoginDto loginDto) {
         // 调用认证服务进行登录
         // 这里暂时只返回成功与否，后续会返回 Token
@@ -65,6 +68,7 @@ public class LoginController {
      * @return 操作结果
      */
     @PostMapping("/logout")
+    @Log(title = "用户登出", businessType = BusinessType.LOGOUT)
     public R<?> logout() {
         // TODO: 后续可以添加逻辑，例如记录登出日志，或者将 Token 加入黑名单 (如果需要)
         return R.success("退出成功");

@@ -6,6 +6,8 @@ import com.school.entity.Role;
 import com.school.entity.query.RoleQuery; // 假设有 RoleQuery 用于分页和条件查询
 import com.school.service.RoleService;
 import com.school.utils.R;
+import com.school.annotation.Log; // Import Log annotation
+import com.school.constant.BusinessType; // Import BusinessType constants
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize; // 导入
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class RoleController {
      * @param query 查询条件 (roleName, roleKey, status, dateRange) + 分页参数
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('base:role:list') or hasAuthority('base:role:view')")
+    @PreAuthorize("hasAuthority('system:role:list')") // Corrected permission key
     public R<IPage<Role>> list(RoleQuery query) { // 使用 RoleQuery 接收查询参数
         Page<Role> page = new Page<>(query.getPageNum(), query.getPageSize());
         IPage<Role> rolePage = roleService.page(page, query.buildQueryWrapper()); // 假设 RoleQuery 有 buildQueryWrapper 方法
@@ -42,7 +44,7 @@ public class RoleController {
      * @param roleId 角色ID
      */
     @GetMapping(value = "/{roleId}")
-    @PreAuthorize("hasAuthority('base:role:view')")
+    @PreAuthorize("hasAuthority('system:role:view')") // Corrected permission key
     public R<Role> getInfo(@PathVariable Long roleId) {
         Role role = roleService.selectRoleById(roleId);
         return R.success(role);
@@ -53,7 +55,8 @@ public class RoleController {
      * @param role 角色实体 (包含 menuIds)
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('base:role:add')")
+    @PreAuthorize("hasAuthority('system:role:add')") // Corrected permission key
+    @Log(title = "角色管理", businessType = BusinessType.INSERT)
     public R<Void> add(@RequestBody Role role) {
         // 可以在 Controller 层校验角色权限
         // checkRolePermission();
@@ -72,7 +75,8 @@ public class RoleController {
      * @param role 角色实体 (包含 menuIds)
      */
     @PutMapping
-    @PreAuthorize("hasAuthority('base:role:edit')")
+    @PreAuthorize("hasAuthority('system:role:edit')") // Corrected permission key
+    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     public R<Void> edit(@RequestBody Role role) {
         // 可以在 Controller 层校验角色权限
         // checkRolePermission();
@@ -104,7 +108,8 @@ public class RoleController {
      * @param role 角色实体 (包含 id 和 isValid)
      */
     @PutMapping("/changeStatus")
-    @PreAuthorize("hasAuthority('base:role:edit')")
+    @PreAuthorize("hasAuthority('system:role:edit')") // Corrected permission key
+    @Log(title = "角色管理", businessType = BusinessType.UPDATE)
     public R<Void> changeStatus(@RequestBody Role role) {
         // 可以在 Controller 层校验角色权限
         // checkRolePermission();
@@ -118,7 +123,8 @@ public class RoleController {
      * @param roleIds 角色ID数组
      */
     @DeleteMapping("/{roleIds}")
-    @PreAuthorize("hasAuthority('base:role:delete')")
+    @PreAuthorize("hasAuthority('system:role:delete')") // Corrected permission key
+    @Log(title = "角色管理", businessType = BusinessType.DELETE)
     public R<Void> remove(@PathVariable Long[] roleIds) {
         // 可以在 Controller 层校验角色权限
         // checkRolePermission();
@@ -131,7 +137,7 @@ public class RoleController {
      * 通常需要查看角色或分配用户的权限
      */
     @GetMapping("/optionselect")
-    @PreAuthorize("hasAuthority('base:role:list') or hasAuthority('base:user:edit')")
+    @PreAuthorize("hasAuthority('system:role:list') or hasAuthority('system:user:edit')") // Corrected permission keys
     public R<List<Role>> optionselect() {
         return R.success(roleService.selectRoleAll());
     }

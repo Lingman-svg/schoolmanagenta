@@ -9,6 +9,8 @@
 package com.school.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.school.annotation.Log;
+import com.school.constant.BusinessType;
 import com.school.entity.Grade;
 import com.school.entity.dto.GradeDto;
 import com.school.entity.query.GradeQuery;
@@ -34,7 +36,7 @@ import java.util.List; // Import List
  */
 @Slf4j
 @RestController
-@RequestMapping("/grade")
+@RequestMapping("/resource/grades")
 @RequiredArgsConstructor
 public class GradeController {
 
@@ -44,7 +46,7 @@ public class GradeController {
      * 分页查询成绩列表
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('base:grade:list') or hasAuthority('base:grade:view')")
+    @PreAuthorize("hasAuthority('resource:grade:list')")
     public R<Page<GradeDto>> listGrades(GradeQuery query) {
         log.info("查询成绩列表，参数: {}", query);
         Page<GradeDto> pageResult = gradeService.listGrades(query);
@@ -55,7 +57,7 @@ public class GradeController {
      * 获取成绩详情
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:grade:view')")
+    @PreAuthorize("hasAuthority('resource:grade:view')")
     public R<Grade> getGradeInfo(@PathVariable Long id) {
         log.info("获取成绩详情，ID: {}", id);
         Grade grade = gradeService.getGradeInfo(id);
@@ -70,7 +72,8 @@ public class GradeController {
      * 新增成绩
      */
     @PostMapping
-    @PreAuthorize("hasAuthority('base:grade:add')")
+    @PreAuthorize("hasAuthority('resource:grade:add')")
+    @Log(title = "成绩管理", businessType = BusinessType.INSERT)
     public R<Void> addGrade(@RequestBody Grade grade) { // POST 请求体接收 Grade 对象
         log.info("新增成绩: {}", grade);
         // 在 Service 层已有校验
@@ -82,7 +85,8 @@ public class GradeController {
      * 修改成绩
      */
     @PutMapping
-    @PreAuthorize("hasAuthority('base:grade:edit')")
+    @PreAuthorize("hasAuthority('resource:grade:edit')")
+    @Log(title = "成绩管理", businessType = BusinessType.UPDATE)
     public R<Void> updateGrade(@RequestBody Grade grade) { // PUT 请求体接收 Grade 对象
         log.info("修改成绩: {}", grade);
         // 在 Service 层已有校验
@@ -94,7 +98,8 @@ public class GradeController {
      * 删除成绩
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('base:grade:delete')")
+    @PreAuthorize("hasAuthority('resource:grade:delete')")
+    @Log(title = "成绩管理", businessType = BusinessType.DELETE)
     public R<Void> deleteGrade(@PathVariable Long id) {
         log.info("删除成绩，ID: {}", id);
         boolean success = gradeService.deleteGrade(id);
@@ -105,7 +110,8 @@ public class GradeController {
      * 批量删除成绩
      */
     @DeleteMapping("/batch")
-    @PreAuthorize("hasAuthority('base:grade:delete')")
+    @PreAuthorize("hasAuthority('resource:grade:delete')")
+    @Log(title = "成绩管理", businessType = BusinessType.DELETE)
     public R<Void> deleteGradesBatch(@RequestBody List<Long> ids) { // DELETE 请求体接收 ID 列表
         log.info("批量删除成绩，IDs: {}", ids);
         boolean success = gradeService.deleteGradesBatch(ids);
@@ -116,7 +122,7 @@ public class GradeController {
      * 下载成绩导入模板
      */
     @GetMapping("/template")
-    @PreAuthorize("hasAuthority('base:grade:import') or hasAuthority('base:grade:list')")
+    @PreAuthorize("hasAuthority('resource:grade:import')")
     public void downloadTemplate(HttpServletResponse response) {
         try {
             // 使用 GradeExcelVo 生成模板
@@ -132,7 +138,8 @@ public class GradeController {
      * 导入成绩数据
      */
     @PostMapping("/import")
-    @PreAuthorize("hasAuthority('base:grade:import') or hasAuthority('base:grade:add') or hasAuthority('base:grade:edit')")
+    @PreAuthorize("hasAuthority('resource:grade:import')")
+    @Log(title = "成绩管理", businessType = BusinessType.IMPORT)
     public R<String> importGrades(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return R.fail("上传文件不能为空");
@@ -154,7 +161,8 @@ public class GradeController {
      * 导出成绩数据
      */
     @PostMapping("/export") // Use POST to allow query body
-    @PreAuthorize("hasAuthority('base:grade:export') or hasAuthority('base:grade:list')")
+    @PreAuthorize("hasAuthority('resource:grade:export')")
+    @Log(title = "成绩管理", businessType = BusinessType.EXPORT)
     public void exportGrades(HttpServletResponse response, @RequestBody GradeQuery query) {
          // Note: Query might be null if frontend sends empty body for exporting all
         log.info("导出成绩数据，查询条件: {}", query);

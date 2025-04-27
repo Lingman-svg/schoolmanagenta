@@ -10,7 +10,7 @@ package com.school.controller;
 
 import com.school.service.AiService;
 import com.school.utils.R; // 引入统一响应结果类
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor; // Use constructor injection
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +22,12 @@ import java.util.Map; // 用于接收简单的 JSON 请求体
 
 @RestController
 @RequestMapping("/ai") // 定义 AI 相关接口的基础路径
+@RequiredArgsConstructor // Use Lombok for constructor injection
 public class AiController {
 
     private static final Logger log = LoggerFactory.getLogger(AiController.class);
 
-    @Autowired
-    private AiService aiService;
+    private final AiService aiService; // Inject service via constructor
 
     /**
      * 支持 Function Calling 的 AI 聊天端点
@@ -43,8 +43,8 @@ public class AiController {
 
         log.info("Received AI chat request: {}", userMessage);
         try {
-            // Call the service method that handles function calling
-            String aiResponse = aiService.chatWithFunctions(userMessage);
+            // Call the service method
+            String aiResponse = aiService.chat(userMessage); // Call the correct service method
             return R.success(aiResponse);
         } catch (Exception e) {
             log.error("Error processing AI chat request: {}", e.getMessage(), e);
